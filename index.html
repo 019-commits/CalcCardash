@@ -402,25 +402,111 @@ input:disabled {
 </div>
 
 <script>
-    // --- БАЗОВЫЕ ДАННЫЕ (КУРСЫ ПО ФОТО) ---
-    // Эти курсы используются как резервные, если API не отвечает
+    // --- БАЗОВЫЕ ДАННЫЕ (резервные курсы) ---
     const FALLBACK_RATES = {
-        JPY_INTERNAL: 0.5550, // 100 JPY = 55.50 -> 1 JPY = 0.5550
+        JPY_INTERNAL: 0.5550,
         JPY_SWIFT: 0.5550,
-        JPY_CASH: 0.5580, // AFA Trading наличные: 1 JPY = 55.80 -> 0.5580
-        JPY_QR: 0.5550, // AFA Trading QR: 1 JPY = 55.50 -> 0.5550
-        CNY: 13.30, // 1 CNY = 13.30
-        KRW: 0.0622, // 1000 KRW = 62.20 -> 1 KRW = 0.0622
-        THB: 2.69, // 1 THB = 2.69
-        AED: 22.90, // 1 AED = 22.90
-        USD_SWIFT: 87.80, // 1 USD = 87.80
-        USD_IDUBID: 89.30 // 1 USD = 89.30
+        JPY_CASH: 0.5580,
+        JPY_QR: 0.5550,
+        CNY: 13.30,
+        KRW: 0.0622,
+        THB: 2.69,
+        AED: 22.90,
+        USD_SWIFT: 87.80,
+        USD_IDUBID: 89.30
     };
 
-    // Текущие курсы (будут обновляться из API)
     let CURRENT_RATES = { ...FALLBACK_RATES };
+    let lastUpdateTime = null;
 
-    // --- ЗАГРУЗКА КУРСОВ С API ---
+    // --- ЗАГРУЗКА КУРСОВ ИЗ TELEGRAM (через сервер) ---
+    async function loadTelegramRates() {
+        const statusEl = document.getElementById('rate-status');
+        const lastUpdateEl = document.getElementById('lastUpdateTime');
+        const rateInput = document.getElementById('rate-input');
+        const rateSource = document.getElementById('rate-source');
+
+        // Создаём кнопку для отображения статуса (если её нет)
+        let tgBtn = document.getElementById('telegramBtn');
+        if (!tgBtn) {
+            // Создаём кнопку, если её нет
+            const panel = document.querySelector('.panel .form-group');
+            const btnDiv = document.createElement('div');
+            btnDiv.style.margin = '10px 0';
+            btnDiv.innerHTML = `
+                <button class="btn-telegram" id="telegramBtn" onclick="loadTelegramRates()" style="background: #0088cc; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    📱 Загрузить курсы из Telegram
+                </button>
+                <div class="telegram-status" id="telegramStatus" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 3px;">
+                    Статус: <span class="telegram-error" style="color: var(--danger);">Не загружено</span>
+                </div>
+            `;
+            panel.parentNode.insertBefore(btnDiv, panel.nextSibling);
+        }
+
+        const btn = document.getElementById('telegramBtn');
+        const statusTelegram = document.getElementById('telegramStatus');
+
+        btn.disabled = true;
+        btn.textContent = '⏳ Загрузка...';
+        statusTelegram.innerHTML = 'Статус: <span class="telegram-error">Загрузка...</span>';
+        statusEl.innerText = "Статус: Загрузка из Telegram...";
+        statusEl.className = "status-badge";
+
+        try {
+            // Обращаемся к твоему серверу
+            const response = await fetch('http://localhost:3000/api/rates');
+            
+            if (!response.ok) {
+                throw new Error(`Ошибка сервера: ${response.status}`);
+            }
+            
+            const data = await response.json();
+
+            if (data.rates) {
+                const r = data.rates;
+                
+                // Обновляем все курсы из Telegram
+                CURRENT_RATES.JPY_INTERNAL = r.JPY || FALLBACK_RATES.JPY_INTERNAL;
+                CURRENT_RATES.JPY_SWIFT = r.JPY || FALLBACK_RATES.JPY_SWIFT;
+                CURRENT_RATES.JPY_CASH = r.JPY_AFA || FALLBACK_RATES.JPY_CASH;
+                CURRENT_RATES.JPY_QR = r.JPY_QR || FALLBACK_RATES.JPY_QR;
+                CURRENT_RATES.USD_SWIFT = r.USD || FALLBACK_RATES.USD_SWIFT;
+                CURRENT_RATES.USD_IDUBID = r.USD_IDUBID || FALLBACK_RATES.USD_IDUBID;
+                CURRENT_RATES.CNY = r.CNY || FALLBACK_RATES.CNY;
+                CURRENT_RATES.KRW = r.KRW || FALLBACK_RATES.KRW;
+                CURRENT_RATES.THB = r.THB || FALLBACK_RATES.THB;
+                CURRENT_RATES.AED = r.AED || FALLBACK_RATES.AED;
+
+                lastUpdateTime = new Date();
+                lastUpdateEl.innerText = lastUpdateTime.toLocaleTimeString('ru-RU') + ' (Telegram)';
+
+                statusTelegram.innerHTML = `Статус: <span style="color: #00ff88;">✅ Загружено (источник: ${data.source})</span>`;
+                statusEl.innerText = "Статус: Telegram + ЦБ";
+                statusEl.className = "status-badge success";
+
+                updateCurrencyHints();
+                console.log('✅ Все курсы обновлены из Telegram:', CURRENT_RATES);
+            } else {
+                throw new Error('Курсы не получены');
+            }
+
+        } catch (error) {
+            console.error('❌ Ошибка получения курсов из Telegram:', error);
+            statusTelegram.innerHTML = `Статус: <span style="color: var(--danger);">❌ Ошибка: ${error.message}</span>`;
+            statusEl.innerText = "Статус: Ошибка Telegram, используем резерв";
+            statusEl.className = "status-badge error";
+            
+            // Используем резервные курсы
+            CURRENT_RATES = { ...FALLBACK_RATES };
+            updateCurrencyHints();
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '📱 Загрузить курсы из Telegram';
+        }
+    }
+
+    // --- ЗАГРУЗКА КУРСОВ С ЦБ (резервный источник) ---
     async function loadRates() {
         const statusEl = document.getElementById('rate-status');
         const calcBtn = document.getElementById('calculateBtn');
@@ -436,77 +522,34 @@ input:disabled {
             if (!cbrResponse.ok) throw new Error('Ошибка загрузки курсов ЦБ');
             const cbrData = await cbrResponse.json();
 
-            // 2. Загружаем курсы ВТБ для CNY и JPY (через парсинг)
-            // Используем API ВТБ для получения курсов
-            let vtbRates = {};
-            try {
-                // Пробуем получить курсы ВТБ через их API
-                const vtbResponse = await fetch('https://www.vtb.ru/api/v1/currency/rates/');
-                if (vtbResponse.ok) {
-                    const vtbData = await vtbResponse.json();
-                    // Парсим ответ ВТБ (структура может меняться)
-                    if (vtbData && vtbData.rates) {
-                        const cny = vtbData.rates.find(r => r.code === 'CNY');
-                        const jpy = vtbData.rates.find(r => r.code === 'JPY');
-                        if (cny) vtbRates.CNY = cny.buyRate || cny.rate;
-                        if (jpy) vtbRates.JPY = jpy.buyRate || jpy.rate;
-                    }
-                }
-            } catch (e) {
-                console.log('ВТБ API не доступен, используем резервные курсы');
-            }
-
-            // 3. Обновляем курсы из ЦБ РФ
+            // 2. Обновляем курсы из ЦБ РФ (только если нет курсов из Telegram)
             if (cbrData && cbrData.Valute) {
-                // USD
-                if (cbrData.Valute.USD) {
+                if (cbrData.Valute.USD && !CURRENT_RATES.USD_SWIFT) {
                     const usdRate = cbrData.Valute.USD.Value / cbrData.Valute.USD.Nominal;
                     CURRENT_RATES.USD_SWIFT = usdRate;
-                    CURRENT_RATES.USD_IDUBID = usdRate + 1.5; // IDUBID обычно немного выше
+                    CURRENT_RATES.USD_IDUBID = usdRate + 1.5;
                 }
-                // CNY
-                if (cbrData.Valute.CNY) {
-                    const cnyRate = cbrData.Valute.CNY.Value / cbrData.Valute.CNY.Nominal;
-                    CURRENT_RATES.CNY = cnyRate;
+                if (cbrData.Valute.CNY && !CURRENT_RATES.CNY) {
+                    CURRENT_RATES.CNY = cbrData.Valute.CNY.Value / cbrData.Valute.CNY.Nominal;
                 }
-                // KRW
-                if (cbrData.Valute.KRW) {
-                    const krwRate = cbrData.Valute.KRW.Value / cbrData.Valute.KRW.Nominal;
-                    CURRENT_RATES.KRW = krwRate;
+                if (cbrData.Valute.KRW && !CURRENT_RATES.KRW) {
+                    CURRENT_RATES.KRW = cbrData.Valute.KRW.Value / cbrData.Valute.KRW.Nominal;
                 }
-                // THB
-                if (cbrData.Valute.THB) {
-                    const thbRate = cbrData.Valute.THB.Value / cbrData.Valute.THB.Nominal;
-                    CURRENT_RATES.THB = thbRate;
+                if (cbrData.Valute.THB && !CURRENT_RATES.THB) {
+                    CURRENT_RATES.THB = cbrData.Valute.THB.Value / cbrData.Valute.THB.Nominal;
                 }
-                // AED
-                if (cbrData.Valute.AED) {
-                    const aedRate = cbrData.Valute.AED.Value / cbrData.Valute.AED.Nominal;
-                    CURRENT_RATES.AED = aedRate;
+                if (cbrData.Valute.AED && !CURRENT_RATES.AED) {
+                    CURRENT_RATES.AED = cbrData.Valute.AED.Value / cbrData.Valute.AED.Nominal;
                 }
-                // JPY
-                if (cbrData.Valute.JPY) {
+                if (cbrData.Valute.JPY && !CURRENT_RATES.JPY_INTERNAL) {
                     const jpyRate = cbrData.Valute.JPY.Value / cbrData.Valute.JPY.Nominal;
                     CURRENT_RATES.JPY_INTERNAL = jpyRate;
                     CURRENT_RATES.JPY_SWIFT = jpyRate;
                     CURRENT_RATES.JPY_QR = jpyRate;
-                    CURRENT_RATES.JPY_CASH = jpyRate + 0.003; // Наличные обычно дороже
+                    CURRENT_RATES.JPY_CASH = jpyRate + 0.003;
                 }
             }
 
-            // 4. Если есть курсы ВТБ - используем их для CNY и JPY
-            if (vtbRates.CNY) {
-                CURRENT_RATES.CNY = vtbRates.CNY;
-            }
-            if (vtbRates.JPY) {
-                const jpyRate = vtbRates.JPY / 100; // ВТБ часто дает за 100 JPY
-                CURRENT_RATES.JPY_INTERNAL = jpyRate;
-                CURRENT_RATES.JPY_SWIFT = jpyRate;
-                CURRENT_RATES.JPY_QR = jpyRate;
-                CURRENT_RATES.JPY_CASH = jpyRate + 0.003;
-            }
-
-            // 5. Обновляем время последнего обновления
             const now = new Date();
             lastUpdateEl.innerText = now.toLocaleTimeString('ru-RU');
 
@@ -517,9 +560,11 @@ input:disabled {
             updateCurrencyHints();
 
         } catch (error) {
-            console.error('Ошибка загрузки курсов:', error);
-            // Используем резервные курсы
-            CURRENT_RATES = { ...FALLBACK_RATES };
+            console.error('Ошибка загрузки курсов ЦБ:', error);
+            // Используем резервные курсы, если они ещё не установлены
+            if (!CURRENT_RATES.JPY_INTERNAL) {
+                CURRENT_RATES = { ...FALLBACK_RATES };
+            }
             
             const now = new Date();
             lastUpdateEl.innerText = now.toLocaleTimeString('ru-RU') + ' (резерв)';
@@ -532,13 +577,6 @@ input:disabled {
         }
     }
 
-    // Загружаем курсы при открытии страницы
-    document.addEventListener('DOMContentLoaded', () => {
-        loadRates();
-        // Обновляем курсы каждый час
-        setInterval(loadRates, 3600000);
-    });
-
     // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
     function updateCurrencyHints() {
         const country = document.getElementById('country').value;
@@ -547,7 +585,6 @@ input:disabled {
 
         let rateVal = 0;
         let sourceText = "Не выбрано";
-
         const manualUsdInput = document.getElementById('manual-usd-rate').value;
 
         switch(country) {
@@ -569,7 +606,7 @@ input:disabled {
                 break;
             case 'CNY': 
                 rateVal = CURRENT_RATES.CNY; 
-                sourceText = "Курс CNY (ВТБ/ЦБ)"; 
+                sourceText = "Курс CNY"; 
                 break;
             case 'KRW': 
                 rateVal = CURRENT_RATES.KRW; 
@@ -606,6 +643,8 @@ input:disabled {
 
         if (rateVal) {
             rateInput.value = rateVal.toFixed(4);
+            const rate100 = (rateVal * 100).toFixed(2);
+            rateInput.title = `100 JPY = ${rate100} ₽`;
         } else {
             rateInput.value = "Ошибка загрузки";
         }
@@ -638,7 +677,7 @@ input:disabled {
         }
     }
 
-    // --- ТАМОЖЕННЫЕ РАСЧЕТЫ (из calcus.ru) ---
+    // --- ТАМОЖЕННЫЕ РАСЧЕТЫ ---
     const EUR_RATE = 96.7538;
 
     function getCustomsFee(priceRub) {
@@ -918,6 +957,23 @@ input:disabled {
             loader.style.display = 'none';
         }, 800);
     }
+
+    // --- ЗАГРУЗКА ПРИ СТАРТЕ ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Сначала пробуем загрузить из Telegram
+        loadTelegramRates().then(() => {
+            // Затем догружаем из ЦБ (если чего-то не хватает)
+            loadRates();
+        }).catch(() => {
+            // Если Telegram не работает, грузим из ЦБ
+            loadRates();
+        });
+
+        // Обновляем курсы каждые 10 минут из Telegram
+        setInterval(loadTelegramRates, 600000);
+        // Обновляем из ЦБ каждый час
+        setInterval(loadRates, 3600000);
+    });
 </script>
 </body>
 </html>

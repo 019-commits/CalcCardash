@@ -1,313 +1,492 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CalcCardash.ru — Растаможка автомобиля</title>
+<title>CalcCardash.ru — Расчёт растаможки автомобиля</title>
 
 <style>
-:root {
-    --bg: #0f1115;
-    --card: #161b22;
-    --input: #1f252e;
-    --border: #2a313a;
-    --text: #fff;
-    --muted: #a5adb8;
-    --accent: #00f2ff;
-    --danger: #ff4d4d;
-    --green: #00ff88;
+:root{
+    --bg:#070a0f;
+    --card:#101720;
+    --card2:#0c1219;
+    --input:#0a1017;
+    --border:#263342;
+    --text:#f4f7fb;
+    --muted:#8c99a8;
+    --cyan:#00eaff;
+    --blue:#168cff;
+    --green:#21e58b;
+    --red:#ff5964;
+    --yellow:#ffc857;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    font-family: Segoe UI, Roboto, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 20px;
+html{
+    scroll-behavior:smooth;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
+body{
+    min-height:100vh;
+    padding:22px;
+    font-family:
+        Inter,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(0,234,255,.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 95% 5%,
+            rgba(22,140,255,.12),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            #070a0f,
+            #0c1118
+        );
 }
 
-header {
-    text-align: center;
-    margin-bottom: 35px;
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.35;
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        );
+    background-size:40px 40px;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 0 15px rgba(0,242,255,.5);
+.container{
+    width:min(1180px,100%);
+    margin:auto;
+    position:relative;
+    z-index:1;
 }
 
-.subtitle {
-    color: var(--muted);
+header{
+    text-align:center;
+    margin:18px 0 30px;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
+.logo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    font-size:clamp(2rem,5vw,3.3rem);
+    font-weight:950;
+    letter-spacing:-2px;
 }
 
-@media(max-width:900px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
+.logo-icon{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    color:#001014;
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--blue)
+        );
+    box-shadow:
+        0 0 35px rgba(0,234,255,.25);
 }
 
-.panel,
-.results {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+.subtitle{
+    color:var(--muted);
+    margin-top:8px;
 }
 
-.panel-title {
-    font-size: 1.25rem;
-    font-weight: 700;
+.year{
+    display:inline-block;
+    margin-top:14px;
+    padding:7px 13px;
+    border-radius:999px;
+    color:var(--green);
+    border:1px solid rgba(33,229,139,.3);
+    background:rgba(33,229,139,.07);
+    font-size:.78rem;
+    font-weight:800;
 }
 
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
 }
 
-.badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: .78rem;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    background: rgba(0,242,255,.08);
+.panel{
+    padding:24px;
+    border-radius:22px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,24,33,.97),
+            rgba(9,14,20,.97)
+        );
+    border:1px solid var(--border);
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.4);
 }
 
-.badge.error {
-    color: var(--danger);
-    border-color: var(--danger);
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding-bottom:17px;
+    margin-bottom:20px;
+    border-bottom:1px solid var(--border);
 }
 
-.badge.success {
-    color: var(--green);
-    border-color: var(--green);
+.panel-title{
+    font-size:1.15rem;
+    font-weight:900;
 }
 
-.form-group {
-    margin-bottom: 16px;
+.badge{
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:.72rem;
+    font-weight:800;
+    white-space:nowrap;
+    color:var(--cyan);
+    background:rgba(0,234,255,.07);
+    border:1px solid rgba(0,234,255,.3);
 }
 
-label {
-    display: block;
-    color: var(--muted);
-    margin-bottom: 7px;
-    font-size: .9rem;
+.badge.success{
+    color:var(--green);
+    border-color:rgba(33,229,139,.3);
+    background:rgba(33,229,139,.07);
+}
+
+.badge.error{
+    color:var(--red);
+    border-color:rgba(255,89,100,.3);
+    background:rgba(255,89,100,.07);
+}
+
+.badge.loading{
+    color:var(--yellow);
+    border-color:rgba(255,200,87,.3);
+    background:rgba(255,200,87,.07);
+}
+
+.form-group{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    color:#aeb8c5;
+    font-size:.84rem;
+    font-weight:650;
 }
 
 input,
-select {
-    width: 100%;
-    padding: 12px 14px;
-    background: var(--input);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 1rem;
+select{
+    width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--input);
+    color:var(--text);
+    font-size:.95rem;
+    transition:.2s;
+}
+
+input::placeholder{
+    color:#526071;
 }
 
 input:focus,
-select:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,242,255,.12);
+select:focus{
+    outline:none;
+    border-color:var(--cyan);
+    box-shadow:
+        0 0 0 3px rgba(0,234,255,.08);
 }
 
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
 }
 
-@media(max-width:500px) {
-    .row {
-        grid-template-columns: 1fr;
+.expense{
+    display:grid;
+    grid-template-columns:1fr 110px;
+    gap:8px;
+}
+
+.calculate{
+    width:100%;
+    min-height:56px;
+    margin-top:3px;
+    border:0;
+    border-radius:14px;
+    cursor:pointer;
+    color:#001014;
+    font-size:1rem;
+    font-weight:950;
+    background:
+        linear-gradient(
+            110deg,
+            #00eaff,
+            #00c8e8 45%,
+            #168cff
+        );
+    box-shadow:
+        0 12px 35px rgba(0,170,255,.2);
+    transition:.2s;
+}
+
+.calculate:hover{
+    transform:translateY(-2px);
+    box-shadow:
+        0 15px 45px rgba(0,170,255,.3);
+}
+
+.telegram-box{
+    padding:16px;
+    margin-bottom:17px;
+    border-radius:15px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,136,204,.14),
+            rgba(0,136,204,.035)
+        );
+    border:1px solid rgba(0,136,204,.35);
+}
+
+.telegram-title{
+    font-weight:900;
+}
+
+.telegram-status{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:.77rem;
+    line-height:1.5;
+}
+
+.telegram-button{
+    margin-top:12px;
+    padding:10px 14px;
+    border:0;
+    border-radius:10px;
+    background:#0088cc;
+    color:white;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.telegram-button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.rate-card{
+    padding:20px;
+    margin-bottom:18px;
+    border-radius:16px;
+    border:1px solid rgba(0,234,255,.3);
+    background:
+        radial-gradient(
+            circle at 100% 0,
+            rgba(0,234,255,.12),
+            transparent 45%
+        ),
+        #091018;
+}
+
+.rate-label{
+    color:var(--muted);
+    font-size:.77rem;
+}
+
+.rate-value{
+    margin-top:5px;
+    color:var(--cyan);
+    font-size:2rem;
+    font-weight:950;
+}
+
+.rate-source{
+    margin-top:5px;
+    color:#667484;
+    font-size:.75rem;
+}
+
+.info{
+    padding:14px;
+    margin-top:15px;
+    border-left:3px solid var(--cyan);
+    border-radius:10px;
+    color:var(--muted);
+    background:rgba(255,255,255,.025);
+    font-size:.78rem;
+    line-height:1.55;
+}
+
+.results{
+    margin-top:20px;
+    padding:26px;
+    border-radius:22px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,24,33,.98),
+            rgba(8,13,19,.98)
+        );
+    border:1px solid var(--border);
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.4);
+}
+
+.hidden{
+    display:none;
+}
+
+.error-box{
+    padding:14px;
+    margin-bottom:18px;
+    border-left:3px solid var(--red);
+    border-radius:10px;
+    color:#ff9ba2;
+    background:rgba(255,89,100,.07);
+    font-size:.85rem;
+    line-height:1.5;
+}
+
+.total{
+    text-align:center;
+    padding:10px 0 25px;
+}
+
+.total-label{
+    color:var(--muted);
+    font-size:.76rem;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+}
+
+.total-value{
+    margin-top:9px;
+    color:var(--cyan);
+    font-size:clamp(2.3rem,7vw,4rem);
+    line-height:1;
+    font-weight:950;
+    letter-spacing:-2px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.detail{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:15px;
+    border:1px solid rgba(255,255,255,.045);
+    border-radius:12px;
+    background:rgba(255,255,255,.02);
+}
+
+.detail-name{
+    color:var(--muted);
+    font-size:.84rem;
+}
+
+.detail-value{
+    font-weight:850;
+    text-align:right;
+}
+
+.section-title{
+    grid-column:1/-1;
+    margin:18px 0 2px;
+    font-size:1rem;
+    font-weight:900;
+}
+
+.footer{
+    margin:20px auto 0;
+    max-width:850px;
+    text-align:center;
+    color:#596675;
+    font-size:.72rem;
+    line-height:1.5;
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
     }
 }
 
-.radio-list {
-    display: grid;
-    gap: 8px;
-}
+@media(max-width:600px){
+    body{
+        padding:12px;
+    }
 
-.radio {
-    padding: 11px;
-    background: var(--input);
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
+    .panel,
+    .results{
+        padding:17px;
+        border-radius:17px;
+    }
 
-.radio:hover {
-    border-color: #39434f;
-}
+    .row,
+    .result-grid{
+        grid-template-columns:1fr;
+    }
 
-.radio input {
-    width: auto;
-    margin-right: 8px;
-    accent-color: var(--accent);
-}
+    .expense{
+        grid-template-columns:1fr 105px;
+    }
 
-button.calculate {
-    width: 100%;
-    margin-top: 10px;
-    padding: 17px;
-    border: 0;
-    border-radius: 11px;
-    cursor: pointer;
-    font-size: 1.05rem;
-    font-weight: 800;
-    background: linear-gradient(45deg,#00f2ff,#007980);
-    color: #000;
-    box-shadow: 0 0 20px rgba(0,242,255,.25);
-}
+    .logo{
+        font-size:2.1rem;
+    }
 
-button.calculate:hover {
-    transform: translateY(-1px);
-}
-
-.telegram-box {
-    background: rgba(0,136,204,.08);
-    border: 1px solid rgba(0,136,204,.4);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.telegram-button {
-    background: #0088cc;
-    color: white;
-    border: 0;
-    border-radius: 7px;
-    padding: 8px 13px;
-    cursor: pointer;
-    font-weight: 700;
-    margin-top: 10px;
-}
-
-.rate-card {
-    background: #0f1115;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-.rate-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--accent);
-}
-
-.rate-source {
-    color: var(--muted);
-    font-size: .85rem;
-    margin-top: 5px;
-}
-
-.expense {
-    display: grid;
-    grid-template-columns: 1fr 110px;
-    gap: 8px;
-}
-
-.info {
-    background: rgba(255,255,255,.04);
-    border-left: 3px solid var(--accent);
-    padding: 14px;
-    color: var(--muted);
-    border-radius: 7px;
-    font-size: .88rem;
-    margin-top: 15px;
-}
-
-.results {
-    margin-top: 25px;
-}
-
-.total {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.total-label {
-    color: var(--muted);
-    text-transform: uppercase;
-    font-size: .85rem;
-    letter-spacing: 1px;
-}
-
-.total-value {
-    color: var(--accent);
-    font-size: 3rem;
-    font-weight: 900;
-    margin-top: 8px;
-}
-
-.detail {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.detail:last-child {
-    border-bottom: 0;
-}
-
-.detail-name {
-    color: var(--muted);
-}
-
-.detail-value {
-    font-weight: 700;
-}
-
-.section-title {
-    margin: 25px 0 10px;
-    font-size: 1.1rem;
-}
-
-.hidden {
-    display: none;
-}
-
-.error-box {
-    background: rgba(255,77,77,.08);
-    border-left: 3px solid var(--danger);
-    color: var(--danger);
-    padding: 12px;
-    border-radius: 7px;
-    margin-bottom: 15px;
-}
-
-.small {
-    color: var(--muted);
-    font-size: .78rem;
+    .logo-icon{
+        width:40px;
+        height:40px;
+    }
 }
 </style>
 </head>
@@ -317,156 +496,280 @@ button.calculate:hover {
 <div class="container">
 
 <header>
-    <h1>CalcCardash.ru</h1>
-    <p class="subtitle">
+
+    <div class="logo">
+        <span class="logo-icon">₽</span>
+        <span>CalcCardash</span>
+    </div>
+
+    <div class="subtitle">
         Калькулятор растаможки автомобилей
-    </p>
+    </div>
+
+    <div class="year">
+        ● Расчётная модель 2026
+    </div>
+
 </header>
+
 
 <div class="grid">
 
-<!-- ================= ЛЕВАЯ ПАНЕЛЬ ================= -->
+<!-- =====================================================
+     АВТОМОБИЛЬ
+===================================================== -->
 
-<div class="panel">
+<section class="panel">
 
     <div class="panel-header">
-        <span class="panel-title">Параметры автомобиля</span>
-        <span class="badge success">2026</span>
+
+        <div class="panel-title">
+            Параметры автомобиля
+        </div>
+
+        <div class="badge success">
+            2026
+        </div>
+
     </div>
 
+
     <div class="form-group">
-        <label>Кто ввозит автомобиль</label>
+
+        <label>
+            Автомобиль ввозит
+        </label>
 
         <select id="ownerType">
-            <option value="phys">Физическое лицо — для личного использования</option>
-            <option value="legal">Юридическое лицо / коммерческий ввоз</option>
+
+            <option value="phys">
+                Физическое лицо — личное использование
+            </option>
+
+            <option value="legal">
+                Юридическое лицо / коммерческий ввоз
+            </option>
+
         </select>
+
     </div>
 
+
     <div class="form-group">
-        <label>Возраст автомобиля</label>
+
+        <label>
+            Возраст автомобиля
+        </label>
 
         <select id="ageGroup">
-            <option value="less_3">До 3 лет</option>
-            <option value="3_5">От 3 до 5 лет</option>
-            <option value="5_7">От 5 до 7 лет</option>
-            <option value="more_7">Старше 7 лет</option>
+
+            <option value="less_3">
+                До 3 лет
+            </option>
+
+            <option value="3_5">
+                От 3 до 5 лет
+            </option>
+
+            <option value="5_7">
+                От 5 до 7 лет
+            </option>
+
+            <option value="more_7">
+                Старше 7 лет
+            </option>
+
         </select>
+
     </div>
+
 
     <div class="form-group">
-        <label>Тип двигателя</label>
+
+        <label>
+            Тип двигателя
+        </label>
 
         <select id="engineType">
-            <option value="petrol">Бензин</option>
-            <option value="diesel">Дизель</option>
-            <option value="hybrid">Гибрид</option>
-            <option value="ev">Электромобиль</option>
+
+            <option value="petrol">
+                Бензин
+            </option>
+
+            <option value="diesel">
+                Дизель
+            </option>
+
+            <option value="hybrid">
+                Гибрид
+            </option>
+
+            <option value="ev">
+                Электромобиль
+            </option>
+
         </select>
+
     </div>
+
 
     <div class="row">
 
         <div class="form-group">
-            <label>Объем двигателя, см³</label>
+
+            <label>
+                Мощность, л.с.
+            </label>
+
             <input
+                id="power"
                 type="number"
-                id="volume"
-                placeholder="1500"
                 min="0"
+                placeholder="150"
             >
+
         </div>
 
+
         <div class="form-group">
-            <label>Мощность, л.с.</label>
+
+            <label>
+                Объём, см³
+            </label>
+
             <input
+                id="volume"
                 type="number"
-                id="power"
-                placeholder="150"
                 min="0"
+                placeholder="1998"
             >
+
         </div>
 
     </div>
 
+
     <div class="form-group">
-        <label>Цена автомобиля</label>
+
+        <label>
+            Стоимость автомобиля
+        </label>
 
         <div class="expense">
+
             <input
-                type="number"
                 id="price"
-                placeholder="2800000"
+                type="number"
                 min="0"
+                placeholder="2800000"
             >
 
             <select id="priceCurrency">
-                <option value="JPY_INTERNAL">JPY</option>
-                <option value="CNY">CNY</option>
-                <option value="KRW">KRW</option>
-                <option value="THB">THB</option>
-                <option value="AED">AED</option>
-                <option value="USD_SWIFT">USD</option>
+
+                <option value="JPY_INTERNAL">
+                    JPY
+                </option>
+
+                <option value="CNY">
+                    CNY
+                </option>
+
+                <option value="KRW">
+                    KRW
+                </option>
+
+                <option value="THB">
+                    THB
+                </option>
+
+                <option value="AED">
+                    AED
+                </option>
+
+                <option value="USD_SWIFT">
+                    USD
+                </option>
+
             </select>
+
         </div>
+
     </div>
 
+
     <div class="form-group">
+
         <label>
-            Автомобиль старше 30 лет и имеет оригинальную конструкцию
+            Автомобиль старше 30 лет и оригинальной конструкции
         </label>
 
         <select id="classic">
-            <option value="no">Нет</option>
-            <option value="yes">Да</option>
+
+            <option value="no">
+                Нет
+            </option>
+
+            <option value="yes">
+                Да
+            </option>
+
         </select>
+
     </div>
+
 
     <button
         class="calculate"
-        onclick="calculate()"
         id="calculateBtn"
+        type="button"
     >
         Рассчитать растаможку
     </button>
 
-</div>
+</section>
 
 
-<!-- ================= ПРАВАЯ ПАНЕЛЬ ================= -->
+<!-- =====================================================
+     КУРСЫ
+===================================================== -->
 
-<div class="panel">
+<section class="panel">
 
     <div class="panel-header">
-        <span class="panel-title">Курсы и дополнительные расходы</span>
 
-        <span
-            class="badge"
+        <div class="panel-title">
+            Курсы и расходы
+        </div>
+
+        <div
+            class="badge loading"
             id="rateStatus"
         >
             Загрузка...
-        </span>
+        </div>
+
     </div>
 
 
     <div class="telegram-box">
 
-        <strong>Курсы Telegram</strong>
+        <div class="telegram-title">
+            📱 Курсы Telegram
+        </div>
 
         <div
+            class="telegram-status"
             id="telegramStatus"
-            class="small"
-            style="margin-top:5px"
         >
-            Подключение...
+            Подключение к серверу...
         </div>
 
         <button
             class="telegram-button"
-            onclick="loadTelegramRates()"
             id="telegramButton"
+            type="button"
         >
-            📱 Обновить курсы
+            Обновить курсы
         </button>
 
     </div>
@@ -474,8 +777,8 @@ button.calculate:hover {
 
     <div class="rate-card">
 
-        <div class="small">
-            Курс автомобиля
+        <div class="rate-label">
+            Курс выбранной валюты
         </div>
 
         <div
@@ -497,16 +800,19 @@ button.calculate:hover {
 
     <div class="form-group">
 
-        <label>Курс EUR для таможенных платежей</label>
+        <label>
+            Курс EUR для таможенных платежей
+        </label>
 
         <input
-            type="number"
             id="eurRate"
+            type="number"
+            min="0"
             step="0.0001"
             value="96.8601"
         >
 
-        <div class="small">
+        <div class="rate-source">
             Можно изменить вручную.
         </div>
 
@@ -515,17 +821,21 @@ button.calculate:hover {
 
     <div class="form-group">
 
-        <label>Комиссия компании</label>
+        <label>
+            Комиссия компании
+        </label>
 
         <div class="expense">
 
             <input
-                type="number"
                 id="commission"
+                type="number"
+                min="0"
                 value="50000"
             >
 
             <select id="commissionCurrency">
+
                 <option value="RUB">RUB</option>
                 <option value="USD_SWIFT">USD</option>
                 <option value="JPY_INTERNAL">JPY</option>
@@ -533,6 +843,7 @@ button.calculate:hover {
                 <option value="KRW">KRW</option>
                 <option value="AED">AED</option>
                 <option value="THB">THB</option>
+
             </select>
 
         </div>
@@ -542,17 +853,21 @@ button.calculate:hover {
 
     <div class="form-group">
 
-        <label>Фрахт / доставка</label>
+        <label>
+            Фрахт / доставка
+        </label>
 
         <div class="expense">
 
             <input
-                type="number"
                 id="freight"
+                type="number"
+                min="0"
                 value="250"
             >
 
             <select id="freightCurrency">
+
                 <option value="USD_SWIFT">USD</option>
                 <option value="RUB">RUB</option>
                 <option value="JPY_INTERNAL">JPY</option>
@@ -560,6 +875,7 @@ button.calculate:hover {
                 <option value="KRW">KRW</option>
                 <option value="AED">AED</option>
                 <option value="THB">THB</option>
+
             </select>
 
         </div>
@@ -569,17 +885,21 @@ button.calculate:hover {
 
     <div class="form-group">
 
-        <label>СВХ и брокер</label>
+        <label>
+            СВХ и брокер
+        </label>
 
         <div class="expense">
 
             <input
-                type="number"
                 id="svh"
+                type="number"
+                min="0"
                 value="70000"
             >
 
             <select id="svhCurrency">
+
                 <option value="RUB">RUB</option>
                 <option value="USD_SWIFT">USD</option>
                 <option value="JPY_INTERNAL">JPY</option>
@@ -587,6 +907,7 @@ button.calculate:hover {
                 <option value="KRW">KRW</option>
                 <option value="AED">AED</option>
                 <option value="THB">THB</option>
+
             </select>
 
         </div>
@@ -595,19 +916,27 @@ button.calculate:hover {
 
 
     <div class="info">
-        <strong>Источник курсов:</strong>
-        только Telegram через твой сервер.
-        Курсы ЦБ в этом калькуляторе не используются.
+
+        <b>Источник курсов:</b>
+        Telegram → твой сервер → калькулятор.
+
+        <br><br>
+
+        Расчётная модель основана на актуальных
+        таблицах CalcUs 2026.
+
     </div>
 
-</div>
+</section>
 
 </div>
 
 
-<!-- ================= РЕЗУЛЬТАТ ================= -->
+<!-- =====================================================
+     РЕЗУЛЬТАТ
+===================================================== -->
 
-<div
+<section
     class="results hidden"
     id="results"
 >
@@ -617,7 +946,7 @@ button.calculate:hover {
     <div class="total">
 
         <div class="total-label">
-            Стоимость автомобиля + растаможка
+            Автомобиль + растаможка + расходы
         </div>
 
         <div
@@ -629,9 +958,19 @@ button.calculate:hover {
 
     </div>
 
+    <div
+        class="result-grid"
+        id="details"
+    ></div>
 
-    <div id="details"></div>
+</section>
 
+
+<div class="footer">
+    CalcCardash.ru • Предварительный расчёт.
+    Фактическая сумма зависит от документов,
+    таможенной стоимости автомобиля и условий
+    конкретного ввоза.
 </div>
 
 </div>
@@ -640,27 +979,31 @@ button.calculate:hover {
 <script>
 
 /* =========================================================
-   TELEGRAM RATES
+   TELEGRAM API
 ========================================================= */
 
 const API_URL =
     "https://server-curs.onrender.com/api/rates";
 
 
+/*
+ * Резервные значения.
+ * Используются только если API недоступен.
+ */
+
 const FALLBACK_RATES = {
 
-    JPY_INTERNAL: 0.5550,
-    JPY_SWIFT: 0.5550,
-    JPY_CASH: 0.5580,
-    JPY_QR: 0.5550,
+    JPY_INTERNAL:0.5550,
 
-    CNY: 13.30,
-    KRW: 0.0622,
-    THB: 2.69,
-    AED: 22.90,
+    CNY:13.30,
 
-    USD_SWIFT: 87.80,
-    USD_IDUBID: 89.30
+    KRW:0.0622,
+
+    THB:2.69,
+
+    AED:22.90,
+
+    USD_SWIFT:87.80
 
 };
 
@@ -670,95 +1013,157 @@ let RATES = {
 };
 
 
+let usingFallback = true;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+
 /* =========================================================
    TELEGRAM
 ========================================================= */
 
-async function loadTelegramRates() {
+async function loadTelegramRates(){
 
     const status =
-        document.getElementById("rateStatus");
+        $("rateStatus");
 
     const telegramStatus =
-        document.getElementById("telegramStatus");
+        $("telegramStatus");
 
     const button =
-        document.getElementById("telegramButton");
+        $("telegramButton");
+
 
     button.disabled = true;
 
-    button.textContent = "⏳ Загрузка...";
+    button.textContent =
+        "⏳ Загрузка...";
 
-    status.textContent = "Загрузка...";
 
-    status.className = "badge";
+    status.textContent =
+        "Загрузка...";
+
+    status.className =
+        "badge loading";
+
 
     telegramStatus.textContent =
         "Получаем актуальные курсы...";
 
-    try {
+
+    try{
 
         const response =
-            await fetch(API_URL, {
-                cache: "no-store"
-            });
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP " + response.status
+            await fetch(
+                API_URL +
+                "?t=" +
+                Date.now(),
+                {
+                    method:"GET",
+                    cache:"no-store",
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
             );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
         }
+
 
         const data =
             await response.json();
 
-        if (!data.rates) {
+
+        if(
+            !data ||
+            !data.rates
+        ){
+
             throw new Error(
-                "API не вернул объект rates"
+                "API не вернул rates"
             );
+
         }
 
-        const r = data.rates;
+
+        const r =
+            data.rates;
+
+
+        const read =
+            (value,fallback) => {
+
+                const n =
+                    Number(value);
+
+                return (
+                    Number.isFinite(n) &&
+                    n > 0
+                )
+                    ? n
+                    : fallback;
+
+            };
+
 
         RATES.JPY_INTERNAL =
-            Number(r.JPY) ||
-            FALLBACK_RATES.JPY_INTERNAL;
+            read(
+                r.JPY,
+                FALLBACK_RATES.JPY_INTERNAL
+            );
 
-        RATES.JPY_SWIFT =
-            Number(r.JPY) ||
-            FALLBACK_RATES.JPY_SWIFT;
-
-        RATES.JPY_CASH =
-            Number(r.JPY_AFA) ||
-            FALLBACK_RATES.JPY_CASH;
-
-        RATES.JPY_QR =
-            Number(r.JPY_QR) ||
-            FALLBACK_RATES.JPY_QR;
-
-        RATES.USD_SWIFT =
-            Number(r.USD) ||
-            FALLBACK_RATES.USD_SWIFT;
-
-        RATES.USD_IDUBID =
-            Number(r.USD_IDUBID) ||
-            FALLBACK_RATES.USD_IDUBID;
 
         RATES.CNY =
-            Number(r.CNY) ||
-            FALLBACK_RATES.CNY;
+            read(
+                r.CNY,
+                FALLBACK_RATES.CNY
+            );
+
 
         RATES.KRW =
-            Number(r.KRW) ||
-            FALLBACK_RATES.KRW;
+            read(
+                r.KRW,
+                FALLBACK_RATES.KRW
+            );
+
 
         RATES.THB =
-            Number(r.THB) ||
-            FALLBACK_RATES.THB;
+            read(
+                r.THB,
+                FALLBACK_RATES.THB
+            );
+
 
         RATES.AED =
-            Number(r.AED) ||
-            FALLBACK_RATES.AED;
+            read(
+                r.AED,
+                FALLBACK_RATES.AED
+            );
+
+
+        RATES.USD_SWIFT =
+            read(
+                r.USD,
+                FALLBACK_RATES.USD_SWIFT
+            );
+
+
+        usingFallback = false;
 
 
         status.textContent =
@@ -768,46 +1173,58 @@ async function loadTelegramRates() {
             "badge success";
 
 
-        telegramStatus.innerHTML =
+        telegramStatus.textContent =
             "✅ Курсы получены из Telegram" +
-            (data.source
-                ? " (" + escapeHtml(data.source) + ")"
-                : "");
+            (
+                data.source
+                    ? " • " +
+                      data.source
+                    : ""
+            );
 
 
         updateCarRate();
 
-    } catch (error) {
+
+    }catch(error){
 
         console.error(
-            "Ошибка Telegram:",
+            "Rates error:",
             error
         );
 
-        status.textContent =
-            "Ошибка Telegram";
-
-        status.className =
-            "badge error";
-
-        telegramStatus.innerHTML =
-            "❌ Не удалось получить курсы. " +
-            "Используются резервные значения.";
 
         RATES = {
             ...FALLBACK_RATES
         };
 
+
+        usingFallback = true;
+
+
+        status.textContent =
+            "Резервный курс";
+
+        status.className =
+            "badge error";
+
+
+        telegramStatus.textContent =
+            "⚠️ Telegram API недоступен. " +
+            "Используются резервные значения.";
+
+
         updateCarRate();
 
-    } finally {
+    }finally{
 
         button.disabled = false;
 
         button.textContent =
-            "📱 Обновить курсы";
+            "Обновить курсы";
 
     }
+
 }
 
 
@@ -815,185 +1232,185 @@ async function loadTelegramRates() {
    RATE
 ========================================================= */
 
-function getRate(currency) {
+function getRate(currency){
 
-    if (currency === "RUB") {
+    if(currency === "RUB")
         return 1;
-    }
 
-    return Number(RATES[currency]) || 0;
+
+    return Number(
+        RATES[currency]
+    ) || 0;
+
 }
 
 
-function updateCarRate() {
+function updateCarRate(){
 
     const currency =
-        document.getElementById(
-            "priceCurrency"
-        ).value;
+        $("priceCurrency").value;
+
 
     const rate =
         getRate(currency);
 
-    document.getElementById(
-        "carRate"
-    ).textContent =
+
+    $("carRate").textContent =
         rate
             ? rate.toFixed(4) + " ₽"
             : "—";
 
 
-    document.getElementById(
-        "rateSource"
-    ).textContent =
-        "Telegram • " +
+    $("rateSource").textContent =
+        (
+            usingFallback
+                ? "Резервный курс"
+                : "Telegram"
+        ) +
+        " • " +
         currency;
 
 }
 
 
-document
-    .getElementById("priceCurrency")
-    .addEventListener(
-        "change",
-        updateCarRate
-    );
-
-
 /* =========================================================
-   CUSTOMS FEE
+   ТАМОЖЕННЫЙ СБОР 2026
 ========================================================= */
 
-function getCustomsFee(priceRub) {
+function getCustomsFee(priceRub){
 
-    if (priceRub <= 200000)
+    if(priceRub <= 200000)
         return 1231;
 
-    if (priceRub <= 450000)
+    if(priceRub <= 450000)
         return 2462;
 
-    if (priceRub <= 1200000)
+    if(priceRub <= 1200000)
         return 4924;
 
-    if (priceRub <= 2700000)
+    if(priceRub <= 2700000)
         return 13541;
 
-    if (priceRub <= 4200000)
+    if(priceRub <= 4200000)
         return 18465;
 
-    if (priceRub <= 5500000)
+    if(priceRub <= 5500000)
         return 21344;
 
-    if (priceRub <= 10000000)
+    if(priceRub <= 10000000)
         return 49240;
 
     return 73860;
+
 }
 
 
 /* =========================================================
-   PHYSICAL PERSON — UNDER 3 YEARS
+   ПОШЛИНА ФИЗЛИЦА < 3 ЛЕТ
 ========================================================= */
 
 function dutyPhysUnder3(
     priceEUR,
     volume
-) {
+){
 
     let percent;
-    let minPerCm;
+    let min;
 
-    if (priceEUR <= 8500) {
+
+    if(priceEUR <= 8500){
 
         percent = 0.54;
-        minPerCm = 2.5;
+        min = 2.5;
 
-    } else if (priceEUR <= 16700) {
-
-        percent = 0.48;
-        minPerCm = 3.5;
-
-    } else if (priceEUR <= 42300) {
+    }else if(priceEUR <= 16700){
 
         percent = 0.48;
-        minPerCm = 5.5;
+        min = 3.5;
 
-    } else if (priceEUR <= 84500) {
-
-        percent = 0.48;
-        minPerCm = 7.5;
-
-    } else if (priceEUR <= 169000) {
+    }else if(priceEUR <= 42300){
 
         percent = 0.48;
-        minPerCm = 15;
+        min = 5.5;
 
-    } else {
+    }else if(priceEUR <= 84500){
 
         percent = 0.48;
-        minPerCm = 20;
+        min = 7.5;
+
+    }else if(priceEUR <= 169000){
+
+        percent = 0.48;
+        min = 15;
+
+    }else{
+
+        percent = 0.48;
+        min = 20;
 
     }
 
+
     return Math.max(
         priceEUR * percent,
-        volume * minPerCm
+        volume * min
     );
+
 }
 
 
 /* =========================================================
-   PHYSICAL PERSON — OLDER THAN 3
+   ПОШЛИНА ФИЗЛИЦА > 3 ЛЕТ
 ========================================================= */
 
 function dutyPhysOlder(
-    ageGroup,
+    age,
     volume
-) {
+){
 
-    const olderThan5 =
-        ageGroup === "5_7" ||
-        ageGroup === "more_7";
+    const old =
+        age === "5_7" ||
+        age === "more_7";
 
 
     let rate;
 
 
-    if (!olderThan5) {
+    if(!old){
 
-        if (volume <= 1000)
+        if(volume <= 1000)
             rate = 1.5;
 
-        else if (volume <= 1500)
+        else if(volume <= 1500)
             rate = 1.7;
 
-        else if (volume <= 1800)
+        else if(volume <= 1800)
             rate = 2.5;
 
-        else if (volume <= 2300)
+        else if(volume <= 2300)
             rate = 2.7;
 
-        else if (volume <= 3000)
+        else if(volume <= 3000)
             rate = 3;
 
         else
             rate = 3.6;
 
-    } else {
+    }else{
 
-        if (volume <= 1000)
+        if(volume <= 1000)
             rate = 3;
 
-        else if (volume <= 1500)
+        else if(volume <= 1500)
             rate = 3.2;
 
-        else if (volume <= 1800)
+        else if(volume <= 1800)
             rate = 3.5;
 
-        else if (volume <= 2300)
+        else if(volume <= 2300)
             rate = 4.8;
 
-        else if (volume <= 3000)
+        else if(volume <= 3000)
             rate = 5;
 
         else
@@ -1001,54 +1418,58 @@ function dutyPhysOlder(
 
     }
 
+
     return volume * rate;
+
 }
 
 
 /* =========================================================
-   LEGAL — PETROL
+   БЕНЗИН — ЮРЛИЦО
 ========================================================= */
 
 function dutyLegalPetrol(
-    ageGroup,
+    age,
     volume,
     priceEUR
-) {
+){
 
-    if (ageGroup === "less_3") {
+    if(age === "less_3"){
 
-        const percent =
-            volume > 2800
-                ? 0.125
-                : 0.15;
+        return priceEUR *
+            (
+                volume > 2800
+                    ? 0.125
+                    : 0.15
+            );
 
-        return priceEUR * percent;
     }
 
 
-    if (
-        ageGroup === "3_5" ||
-        ageGroup === "5_7"
-    ) {
+    if(
+        age === "3_5" ||
+        age === "5_7"
+    ){
 
         let min;
 
-        if (volume <= 1000)
+
+        if(volume <= 1000)
             min = 0.36;
 
-        else if (volume <= 1500)
+        else if(volume <= 1500)
             min = 0.40;
 
-        else if (volume <= 1800)
+        else if(volume <= 1800)
             min = 0.36;
 
-        else if (volume <= 2300)
+        else if(volume <= 2300)
             min = 0.44;
 
-        else if (volume <= 2800)
+        else if(volume <= 2800)
             min = 0.44;
 
-        else if (volume <= 3000)
+        else if(volume <= 3000)
             min = 0.44;
 
         else
@@ -1059,24 +1480,26 @@ function dutyLegalPetrol(
             priceEUR * 0.20,
             volume * min
         );
+
     }
 
 
     let rate;
 
-    if (volume <= 1000)
+
+    if(volume <= 1000)
         rate = 1.4;
 
-    else if (volume <= 1500)
+    else if(volume <= 1500)
         rate = 1.5;
 
-    else if (volume <= 1800)
+    else if(volume <= 1800)
         rate = 1.6;
 
-    else if (volume <= 2300)
+    else if(volume <= 2300)
         rate = 2.2;
 
-    else if (volume <= 3000)
+    else if(volume <= 3000)
         rate = 2.2;
 
     else
@@ -1084,35 +1507,36 @@ function dutyLegalPetrol(
 
 
     return volume * rate;
+
 }
 
 
 /* =========================================================
-   LEGAL — DIESEL
+   ДИЗЕЛЬ — ЮРЛИЦО
 ========================================================= */
 
 function dutyLegalDiesel(
-    ageGroup,
+    age,
     volume,
     priceEUR
-) {
+){
 
-    if (ageGroup === "less_3") {
+    if(age === "less_3")
         return priceEUR * 0.15;
-    }
 
 
-    if (
-        ageGroup === "3_5" ||
-        ageGroup === "5_7"
-    ) {
+    if(
+        age === "3_5" ||
+        age === "5_7"
+    ){
 
         let min;
 
-        if (volume <= 1500)
+
+        if(volume <= 1500)
             min = 0.32;
 
-        else if (volume <= 2500)
+        else if(volume <= 2500)
             min = 0.40;
 
         else
@@ -1123,27 +1547,23 @@ function dutyLegalDiesel(
             priceEUR * 0.20,
             volume * min
         );
+
     }
 
 
-    let rate;
+    if(volume <= 1500)
+        return volume * 1.5;
 
-    if (volume <= 1500)
-        rate = 1.5;
+    if(volume <= 2500)
+        return volume * 2.2;
 
-    else if (volume <= 2500)
-        rate = 2.2;
+    return volume * 3.2;
 
-    else
-        rate = 3.2;
-
-
-    return volume * rate;
 }
 
 
 /* =========================================================
-   MAIN DUTY
+   ПОШЛИНА
 ========================================================= */
 
 function getCustomsDuty({
@@ -1152,145 +1572,163 @@ function getCustomsDuty({
     engine,
     volume,
     priceEUR
-}) {
+}){
 
-    /* Электромобиль */
+    /*
+     * CalcUs:
+     * электромобиль — 15%.
+     */
 
-    if (engine === "ev") {
+    if(engine === "ev"){
 
         return priceEUR * 0.15;
+
     }
 
 
-    /* Физлицо */
+    if(owner === "phys"){
 
-    if (owner === "phys") {
-
-        if (age === "less_3") {
+        if(age === "less_3"){
 
             return dutyPhysUnder3(
                 priceEUR,
                 volume
             );
+
         }
+
 
         return dutyPhysOlder(
             age,
             volume
         );
+
     }
 
 
-    /* Юрлицо */
-
-    if (
-        engine === "diesel"
-    ) {
+    if(engine === "diesel"){
 
         return dutyLegalDiesel(
             age,
             volume,
             priceEUR
         );
+
     }
 
 
     /*
-       Для бензина и гибрида
-       используем бензиновую
-       таблицу.
-    */
+     * Бензин + гибрид.
+     */
 
     return dutyLegalPetrol(
         age,
         volume,
         priceEUR
     );
+
 }
 
 
 /* =========================================================
-   EXCISE
+   АКЦИЗ 2026
 ========================================================= */
 
 function getExcise(
     power,
     owner,
     engine
-) {
+){
 
     /*
-       Для ДВС/гибридов
-       акциз платит юрлицо.
+     * CalcUs:
+     * ДВС — только юридические лица.
+     * Электромобиль — физлица и юрлица.
+     */
 
-       Для электромобиля по
-       модели Calcus также учитываем
-       акциз.
-    */
-
-    if (
+    if(
         owner !== "legal" &&
         engine !== "ev"
-    ) {
+    ){
+
         return 0;
+
     }
 
 
-    if (power <= 90)
+    if(power <= 90)
         return 0;
 
-    if (power <= 150)
+    if(power <= 150)
         return power * 64;
 
-    if (power <= 200)
+    if(power <= 200)
         return power * 613;
 
-    if (power <= 300)
+    if(power <= 300)
         return power * 1004;
 
-    if (power <= 400)
+    if(power <= 400)
         return power * 1711;
 
-    if (power <= 500)
+    if(power <= 500)
         return power * 1771;
 
     return power * 1829;
+
 }
 
 
 /* =========================================================
-   VAT
+   НДС
 ========================================================= */
 
-function getVAT(
+function getVAT({
     priceRub,
     dutyRub,
     excise,
-    owner
-) {
+    owner,
+    engine
+}){
 
-    if (owner !== "legal")
+    /*
+     * ДВС:
+     * НДС только юрлицо.
+     *
+     * EV:
+     * НДС физлицо + юрлицо.
+     */
+
+    if(
+        owner !== "legal" &&
+        engine !== "ev"
+    ){
+
         return 0;
+
+    }
+
 
     return (
         priceRub +
         dutyRub +
         excise
     ) * 0.20;
+
 }
 
 
 /* =========================================================
-   UTILIZATION FEE
+   УТИЛЬСБОР
 ========================================================= */
 
-function getUtilizationFee({
+function getUtilization({
     owner,
     age,
     engine,
     power,
     volume
-}) {
+}){
 
     const base =
         owner === "legal"
@@ -1299,135 +1737,253 @@ function getUtilizationFee({
 
 
     /*
-       Физлицо.
-       Льготный коэффициент.
-    */
+     * Льготный утиль.
+     *
+     * Физлицо,
+     * личное использование,
+     * ДВС <= 3.0 л,
+     * мощность <= 160 л.с.
+     *
+     * EV <= 80 л.с.
+     */
 
-    if (owner === "phys") {
+    if(owner === "phys"){
 
-        let loyalty = false;
+        let eligible = false;
 
 
-        if (engine === "ev") {
+        if(engine === "ev"){
 
-            if (power <= 80)
-                loyalty = true;
+            eligible =
+                power <= 80;
 
-        } else {
+        }else{
 
-            if (
+            eligible =
                 volume <= 3000 &&
-                power <= 160
-            ) {
-                loyalty = true;
-            }
+                power <= 160;
+
         }
 
 
-        if (loyalty) {
+        if(eligible){
 
             const coefficient =
-                age === "less_3" ||
-                age === "3_5"
+                age === "less_3"
                     ? 0.17
                     : 0.26;
 
+
             return base * coefficient;
+
         }
+
     }
 
 
     /*
-       Коммерческий утильсбор
-    */
+     * Коммерческий утиль.
+     *
+     * Коэффициенты оставлены
+     * в конфигурации ниже.
+     */
 
     let coefficient;
 
 
-    if (engine === "ev") {
+    if(engine === "ev"){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 9.12
                 : 10.10;
 
-    } else if (power <= 160) {
+    }else if(power <= 160){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 9.12
                 : 10.10;
 
-    } else if (power <= 200) {
+    }else if(power <= 200){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 17.42
                 : 20.96;
 
-    } else if (power <= 300) {
+    }else if(power <= 300){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 26.87
                 : 30.28;
 
-    } else if (power <= 400) {
+    }else if(power <= 400){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 33.14
                 : 45.64;
 
-    } else if (power <= 500) {
+    }else if(power <= 500){
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 39.69
                 : 50.55;
 
-    } else {
+    }else{
 
         coefficient =
-            age === "less_3" ||
-            age === "3_5"
+            age === "less_3"
                 ? 54.90
                 : 96.08;
+
     }
 
 
     return base * coefficient;
+
 }
 
 
 /* =========================================================
-   EXPENSE
+   РАСХОД
 ========================================================= */
 
 function getExpense(
     amountId,
     currencyId
-) {
+){
 
     const amount =
         Number(
-            document.getElementById(
-                amountId
-            ).value
+            $(amountId).value
         ) || 0;
 
-    const currency =
-        document.getElementById(
-            currencyId
-        ).value;
 
-    return amount * getRate(currency);
+    const currency =
+        $(currencyId).value;
+
+
+    const rate =
+        getRate(currency);
+
+
+    return amount * rate;
+
+}
+
+
+/* =========================================================
+   ФОРМАТ
+========================================================= */
+
+function rub(value){
+
+    return (
+        Number(value) || 0
+    ).toLocaleString(
+        "ru-RU",
+        {
+            maximumFractionDigits:0
+        }
+    ) + " ₽";
+
+}
+
+
+function eur(value){
+
+    return (
+        Number(value) || 0
+    ).toLocaleString(
+        "ru-RU",
+        {
+            maximumFractionDigits:2
+        }
+    ) + " €";
+
+}
+
+
+/* =========================================================
+   DETAIL
+========================================================= */
+
+function addDetail(
+    name,
+    value,
+    currency="RUB"
+){
+
+    const div =
+        document.createElement("div");
+
+
+    div.className =
+        "detail";
+
+
+    div.innerHTML = `
+
+        <span class="detail-name">
+            ${escapeHtml(name)}
+        </span>
+
+        <span class="detail-value">
+            ${
+                currency === "EUR"
+                    ? eur(value)
+                    : rub(value)
+            }
+        </span>
+
+    `;
+
+
+    $("details")
+        .appendChild(div);
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(message){
+
+    $("errorBox").innerHTML = `
+
+        <div class="error-box">
+            ${escapeHtml(message)}
+        </div>
+
+    `;
+
+
+    $("results")
+        .classList
+        .remove("hidden");
+
 }
 
 
@@ -1435,124 +1991,111 @@ function getExpense(
    CALCULATE
 ========================================================= */
 
-function calculate() {
+function calculate(){
+
+    $("errorBox").innerHTML = "";
+
 
     const price =
         Number(
-            document.getElementById(
-                "price"
-            ).value
+            $("price").value
         ) || 0;
 
 
     const volume =
         Number(
-            document.getElementById(
-                "volume"
-            ).value
+            $("volume").value
         ) || 0;
 
 
     const power =
         Number(
-            document.getElementById(
-                "power"
-            ).value
+            $("power").value
         ) || 0;
 
 
     const owner =
-        document.getElementById(
-            "ownerType"
-        ).value;
+        $("ownerType").value;
 
 
     const age =
-        document.getElementById(
-            "ageGroup"
-        ).value;
+        $("ageGroup").value;
 
 
     const engine =
-        document.getElementById(
-            "engineType"
-        ).value;
+        $("engineType").value;
 
 
     const currency =
-        document.getElementById(
-            "priceCurrency"
-        ).value;
+        $("priceCurrency").value;
 
 
     const eurRate =
         Number(
-            document.getElementById(
-                "eurRate"
-            ).value
+            $("eurRate").value
         ) || 0;
 
 
     const classic =
-        document.getElementById(
-            "classic"
-        ).value === "yes";
+        $("classic").value === "yes";
 
 
-    const results =
-        document.getElementById(
-            "results"
+    if(price <= 0){
+
+        showError(
+            "Укажите стоимость автомобиля."
         );
-
-
-    const errorBox =
-        document.getElementById(
-            "errorBox"
-        );
-
-
-    errorBox.innerHTML = "";
-
-
-    if (!price) {
-
-        errorBox.innerHTML =
-            '<div class="error-box">' +
-            'Укажите стоимость автомобиля.' +
-            '</div>';
-
-        results.classList.remove("hidden");
 
         return;
+
     }
 
 
-    if (
-        engine !== "ev" &&
-        volume <= 0
-    ) {
+    if(eurRate <= 0){
 
-        errorBox.innerHTML =
-            '<div class="error-box">' +
-            'Укажите объем двигателя.' +
-            '</div>';
-
-        results.classList.remove("hidden");
+        showError(
+            "Укажите корректный курс EUR."
+        );
 
         return;
+
     }
 
 
-    if (!eurRate) {
+    if(engine !== "ev"){
 
-        errorBox.innerHTML =
-            '<div class="error-box">' +
-            'Укажите курс EUR.' +
-            '</div>';
+        if(volume <= 0){
 
-        results.classList.remove("hidden");
+            showError(
+                "Укажите объём двигателя."
+            );
+
+            return;
+
+        }
+
+
+        if(power <= 0){
+
+            showError(
+                "Укажите мощность двигателя."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    if(engine === "ev" && power <= 0){
+
+        showError(
+            "Для электромобиля укажите мощность."
+        );
 
         return;
+
     }
 
 
@@ -1560,32 +2103,38 @@ function calculate() {
         getRate(currency);
 
 
-    if (!carRate) {
+    if(carRate <= 0){
 
-        errorBox.innerHTML =
-            '<div class="error-box">' +
-            'Курс выбранной валюты не загружен.' +
-            '</div>';
-
-        results.classList.remove("hidden");
+        showError(
+            "Курс выбранной валюты не загружен."
+        );
 
         return;
+
     }
 
 
-    /* Цена автомобиля */
+    /*
+     * Цена авто в RUB.
+     */
 
     const priceRub =
         price * carRate;
 
 
+    /*
+     * Цена в EUR.
+     */
+
     const priceEUR =
         priceRub / eurRate;
 
 
-    /* Пошлина */
+    /*
+     * Пошлина.
+     */
 
-    let dutyEUR =
+    const dutyEUR =
         getCustomsDuty({
             owner,
             age,
@@ -1595,17 +2144,21 @@ function calculate() {
         });
 
 
-    let dutyRub =
+    const dutyRub =
         dutyEUR * eurRate;
 
 
-    /* Таможенный сбор */
+    /*
+     * Таможенный сбор.
+     */
 
     const customsFee =
         getCustomsFee(priceRub);
 
 
-    /* Акциз */
+    /*
+     * Акциз.
+     */
 
     const excise =
         getExcise(
@@ -1615,21 +2168,26 @@ function calculate() {
         );
 
 
-    /* НДС */
+    /*
+     * НДС.
+     */
 
     const vat =
-        getVAT(
+        getVAT({
             priceRub,
             dutyRub,
             excise,
-            owner
-        );
+            owner,
+            engine
+        });
 
 
-    /* Утиль */
+    /*
+     * Утиль.
+     */
 
     let utilization =
-        getUtilizationFee({
+        getUtilization({
             owner,
             age,
             engine,
@@ -1639,16 +2197,20 @@ function calculate() {
 
 
     /*
-       Раритетные авто:
-       утильсбор не начисляется.
-    */
+     * Раритет:
+     * освобождение от утильсбора.
+     */
 
-    if (classic) {
+    if(classic){
+
         utilization = 0;
+
     }
 
 
-    /* Дополнительные расходы */
+    /*
+     * Дополнительные расходы.
+     */
 
     const commission =
         getExpense(
@@ -1671,7 +2233,9 @@ function calculate() {
         );
 
 
-    /* Итог растаможки */
+    /*
+     * Все платежи.
+     */
 
     const customsTotal =
         customsFee +
@@ -1681,7 +2245,9 @@ function calculate() {
         utilization;
 
 
-    /* Полная стоимость */
+    /*
+     * Полная стоимость.
+     */
 
     const total =
         priceRub +
@@ -1691,19 +2257,15 @@ function calculate() {
         svh;
 
 
-    document.getElementById(
-        "total"
-    ).textContent =
+    /*
+     * Вывод.
+     */
+
+    $("total").textContent =
         rub(total);
 
 
-    const details =
-        document.getElementById(
-            "details"
-        );
-
-
-    details.innerHTML = "";
+    $("details").innerHTML = "";
 
 
     addDetail(
@@ -1715,7 +2277,7 @@ function calculate() {
     addDetail(
         "Цена автомобиля в EUR",
         priceEUR,
-        true
+        "EUR"
     );
 
 
@@ -1732,28 +2294,25 @@ function calculate() {
 
 
     addDetail(
+        "Акциз",
+        excise
+    );
+
+
+    addDetail(
+        "НДС",
+        vat
+    );
+
+
+    addDetail(
         "Утилизационный сбор",
         utilization
     );
 
 
-    if (owner === "legal") {
-
-        addDetail(
-            "Акциз",
-            excise
-        );
-
-        addDetail(
-            "НДС 20%",
-            vat
-        );
-
-    }
-
-
     addDetail(
-        "Фрахт",
+        "Фрахт / доставка",
         freight
     );
 
@@ -1770,14 +2329,24 @@ function calculate() {
     );
 
 
-    details.innerHTML +=
-        '<div class="section-title">' +
-        'Итого' +
-        '</div>';
+    const title =
+        document.createElement("div");
+
+
+    title.className =
+        "section-title";
+
+
+    title.textContent =
+        "ИТОГО";
+
+
+    $("details")
+        .appendChild(title);
 
 
     addDetail(
-        "Растаможка",
+        "Таможенные платежи",
         customsTotal
     );
 
@@ -1788,101 +2357,64 @@ function calculate() {
     );
 
 
-    results.classList.remove(
-        "hidden"
-    );
+    $("results")
+        .classList
+        .remove("hidden");
 
 
-    results.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    setTimeout(() => {
+
+        $("results")
+            .scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+    },50);
+
 }
 
 
 /* =========================================================
-   DETAILS
+   EVENTS
 ========================================================= */
 
-function addDetail(
-    name,
-    value,
-    euro = false
-) {
-
-    const details =
-        document.getElementById(
-            "details"
-        );
-
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.className = "detail";
-
-
-    div.innerHTML = `
-        <span class="detail-name">
-            ${escapeHtml(name)}
-        </span>
-
-        <span class="detail-value">
-            ${
-                euro
-                    ? number(value) + " €"
-                    : rub(value)
-            }
-        </span>
-    `;
-
-
-    details.appendChild(div);
-}
-
-
-/* =========================================================
-   FORMAT
-========================================================= */
-
-function rub(value) {
-
-    return (
-        Number(value) || 0
-    ).toLocaleString(
-        "ru-RU",
-        {
-            maximumFractionDigits: 0
-        }
-    ) + " ₽";
-}
-
-
-function number(value) {
-
-    return (
-        Number(value) || 0
-    ).toLocaleString(
-        "ru-RU",
-        {
-            maximumFractionDigits: 2
-        }
+$("calculateBtn")
+    .addEventListener(
+        "click",
+        calculate
     );
-}
 
 
-function escapeHtml(value) {
+$("telegramButton")
+    .addEventListener(
+        "click",
+        loadTelegramRates
+    );
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
+
+$("priceCurrency")
+    .addEventListener(
+        "change",
+        updateCarRate
+    );
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter" &&
+            event.target.tagName !== "SELECT"
+        ){
+
+            calculate();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -1893,18 +2425,20 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        updateCarRate();
+
         loadTelegramRates();
 
+
         /*
-           Обновляем курсы каждые 10 минут.
-        */
+         * Автообновление курсов
+         * каждые 10 минут.
+         */
 
         setInterval(
             loadTelegramRates,
             10 * 60 * 1000
         );
-
-        updateCarRate();
 
     }
 );
@@ -1913,3 +2447,4 @@ document.addEventListener(
 
 </body>
 </html>
+```

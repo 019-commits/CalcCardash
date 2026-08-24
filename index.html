@@ -1,26 +1,27 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CalcCardash.ru — Расчёт растаможки автомобиля</title>
+<title>CalcCardash.ru — Расчёт растаможки авто</title>
 
 <style>
 :root{
     --bg:#070a0f;
-    --card:#101720;
-    --card2:#0c1219;
-    --input:#0a1017;
-    --border:#263342;
-    --text:#f4f7fb;
-    --muted:#8c99a8;
+    --bg2:#0b1017;
+    --card:rgba(17,23,32,.88);
+    --card2:#111821;
+    --input:#0d131b;
+    --border:#202b38;
+    --text:#f5f7fa;
+    --muted:#8e9aaa;
     --cyan:#00eaff;
-    --blue:#168cff;
-    --green:#21e58b;
-    --red:#ff5964;
+    --cyan2:#008cff;
+    --green:#00e58a;
+    --red:#ff5263;
     --yellow:#ffc857;
+    --shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
 *{
@@ -35,38 +36,39 @@ html{
 
 body{
     min-height:100vh;
-    padding:22px;
     font-family:
         Inter,
-        Segoe UI,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         Roboto,
         Arial,
         sans-serif;
     color:var(--text);
     background:
         radial-gradient(
-            circle at 10% 0%,
-            rgba(0,234,255,.13),
-            transparent 30%
+            circle at 15% 10%,
+            rgba(0,234,255,.09),
+            transparent 28%
         ),
         radial-gradient(
-            circle at 95% 5%,
-            rgba(22,140,255,.12),
-            transparent 30%
+            circle at 90% 20%,
+            rgba(0,140,255,.08),
+            transparent 25%
         ),
         linear-gradient(
-            145deg,
-            #070a0f,
-            #0c1118
+            135deg,
+            var(--bg),
+            var(--bg2)
         );
+    padding:24px;
 }
 
-body::before{
+body:before{
     content:"";
     position:fixed;
     inset:0;
     pointer-events:none;
-    opacity:.35;
     background-image:
         linear-gradient(
             rgba(255,255,255,.018) 1px,
@@ -78,137 +80,181 @@ body::before{
             transparent 1px
         );
     background-size:40px 40px;
+    mask-image:linear-gradient(
+        to bottom,
+        black,
+        transparent 80%
+    );
 }
 
 .container{
-    width:min(1180px,100%);
+    width:100%;
+    max-width:1250px;
     margin:auto;
     position:relative;
     z-index:1;
 }
 
-header{
+/* ================= HEADER ================= */
+
+.header{
     text-align:center;
-    margin:18px 0 30px;
+    margin:20px 0 35px;
 }
 
 .logo{
-    display:flex;
+    display:inline-flex;
     align-items:center;
-    justify-content:center;
-    gap:12px;
-    font-size:clamp(2rem,5vw,3.3rem);
-    font-weight:950;
-    letter-spacing:-2px;
+    gap:10px;
+    font-size:15px;
+    color:var(--cyan);
+    font-weight:800;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:15px;
 }
 
-.logo-icon{
-    width:48px;
-    height:48px;
-    display:grid;
-    place-items:center;
-    border-radius:15px;
-    color:#001014;
-    background:
-        linear-gradient(
-            135deg,
-            var(--cyan),
-            var(--blue)
-        );
+.logo-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--cyan);
     box-shadow:
-        0 0 35px rgba(0,234,255,.25);
+        0 0 10px var(--cyan),
+        0 0 25px var(--cyan);
+}
+
+h1{
+    font-size:clamp(2rem,5vw,3.7rem);
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-2px;
+    margin-bottom:14px;
+}
+
+h1 span{
+    color:var(--cyan);
+    text-shadow:0 0 30px rgba(0,234,255,.35);
 }
 
 .subtitle{
     color:var(--muted);
-    margin-top:8px;
+    font-size:1rem;
 }
 
-.year{
-    display:inline-block;
-    margin-top:14px;
-    padding:7px 13px;
-    border-radius:999px;
-    color:var(--green);
-    border:1px solid rgba(33,229,139,.3);
-    background:rgba(33,229,139,.07);
-    font-size:.78rem;
-    font-weight:800;
-}
+/* ================= GRID ================= */
 
-.grid{
+.main-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+    grid-template-columns:
+        minmax(0,1.05fr)
+        minmax(0,.95fr);
+    gap:22px;
 }
 
-.panel{
-    padding:24px;
-    border-radius:22px;
+@media(max-width:950px){
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ================= CARD ================= */
+
+.card{
     background:
         linear-gradient(
             145deg,
-            rgba(17,24,33,.97),
-            rgba(9,14,20,.97)
+            rgba(20,28,39,.94),
+            rgba(11,16,23,.94)
         );
     border:1px solid var(--border);
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.4);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    backdrop-filter:blur(15px);
 }
 
-.panel-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    padding-bottom:17px;
-    margin-bottom:20px;
+.card-header{
+    padding:22px 24px;
     border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
 }
 
-.panel-title{
+.card-title{
     font-size:1.15rem;
-    font-weight:900;
+    font-weight:850;
 }
 
-.badge{
-    padding:6px 10px;
+.card-subtitle{
+    color:var(--muted);
+    font-size:.8rem;
+    margin-top:4px;
+}
+
+.card-body{
+    padding:24px;
+}
+
+/* ================= STATUS ================= */
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 11px;
     border-radius:999px;
-    font-size:.72rem;
+    font-size:.75rem;
     font-weight:800;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.035);
     white-space:nowrap;
-    color:var(--cyan);
-    background:rgba(0,234,255,.07);
-    border:1px solid rgba(0,234,255,.3);
 }
 
-.badge.success{
+.status:before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--yellow);
+    box-shadow:0 0 8px var(--yellow);
+}
+
+.status.success{
     color:var(--green);
-    border-color:rgba(33,229,139,.3);
-    background:rgba(33,229,139,.07);
+    border-color:rgba(0,229,138,.25);
+    background:rgba(0,229,138,.06);
 }
 
-.badge.error{
+.status.success:before{
+    background:var(--green);
+    box-shadow:0 0 9px var(--green);
+}
+
+.status.error{
     color:var(--red);
-    border-color:rgba(255,89,100,.3);
-    background:rgba(255,89,100,.07);
+    border-color:rgba(255,82,99,.25);
+    background:rgba(255,82,99,.06);
 }
 
-.badge.loading{
-    color:var(--yellow);
-    border-color:rgba(255,200,87,.3);
-    background:rgba(255,200,87,.07);
+.status.error:before{
+    background:var(--red);
+    box-shadow:0 0 9px var(--red);
 }
+
+/* ================= FORM ================= */
 
 .form-group{
-    margin-bottom:17px;
+    margin-bottom:19px;
 }
 
 label{
     display:block;
     margin-bottom:8px;
-    color:#aeb8c5;
-    font-size:.84rem;
+    color:#b7c0cc;
+    font-size:.82rem;
     font-weight:650;
 }
 
@@ -217,16 +263,17 @@ select{
     width:100%;
     min-height:48px;
     padding:12px 14px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--input);
     color:var(--text);
-    font-size:.95rem;
+    background:var(--input);
+    border:1px solid var(--border);
+    border-radius:11px;
+    font-size:.94rem;
     transition:.2s;
 }
 
-input::placeholder{
-    color:#526071;
+input:hover,
+select:hover{
+    border-color:#334354;
 }
 
 input:focus,
@@ -234,258 +281,320 @@ select:focus{
     outline:none;
     border-color:var(--cyan);
     box-shadow:
-        0 0 0 3px rgba(0,234,255,.08);
+        0 0 0 3px rgba(0,234,255,.08),
+        0 0 20px rgba(0,234,255,.05);
+}
+
+input::placeholder{
+    color:#526070;
 }
 
 .row{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:12px;
+    gap:14px;
 }
 
-.expense{
+@media(max-width:550px){
+    .row{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+}
+
+.input-with-select{
     display:grid;
-    grid-template-columns:1fr 110px;
+    grid-template-columns:1fr 145px;
     gap:8px;
 }
 
+@media(max-width:550px){
+    .input-with-select{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ================= BUTTON ================= */
+
 .calculate{
     width:100%;
-    min-height:56px;
-    margin-top:3px;
+    min-height:57px;
+    margin-top:7px;
     border:0;
-    border-radius:14px;
+    border-radius:13px;
     cursor:pointer;
-    color:#001014;
+    color:#001013;
     font-size:1rem;
-    font-weight:950;
+    font-weight:900;
+    letter-spacing:.2px;
     background:
         linear-gradient(
             110deg,
             #00eaff,
-            #00c8e8 45%,
-            #168cff
+            #00c8df 45%,
+            #008cff
         );
     box-shadow:
-        0 12px 35px rgba(0,170,255,.2);
+        0 10px 30px rgba(0,205,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.4);
     transition:.2s;
 }
 
 .calculate:hover{
     transform:translateY(-2px);
     box-shadow:
-        0 15px 45px rgba(0,170,255,.3);
+        0 15px 35px rgba(0,205,255,.25),
+        inset 0 1px 0 rgba(255,255,255,.4);
 }
 
-.telegram-box{
-    padding:16px;
-    margin-bottom:17px;
-    border-radius:15px;
+.calculate:active{
+    transform:translateY(0);
+}
+
+/* ================= TELEGRAM ================= */
+
+.telegram{
+    border:1px solid rgba(0,136,204,.3);
     background:
         linear-gradient(
             135deg,
-            rgba(0,136,204,.14),
+            rgba(0,136,204,.11),
             rgba(0,136,204,.035)
         );
-    border:1px solid rgba(0,136,204,.35);
+    border-radius:15px;
+    padding:16px;
+    margin-bottom:18px;
+}
+
+.telegram-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
 }
 
 .telegram-title{
-    font-weight:900;
+    font-weight:850;
 }
 
-.telegram-status{
-    margin-top:7px;
+.telegram-description{
+    margin-top:6px;
     color:var(--muted);
-    font-size:.77rem;
+    font-size:.78rem;
     line-height:1.5;
 }
 
 .telegram-button{
-    margin-top:12px;
-    padding:10px 14px;
     border:0;
-    border-radius:10px;
     background:#0088cc;
     color:white;
-    cursor:pointer;
+    padding:10px 14px;
+    border-radius:9px;
     font-weight:800;
+    cursor:pointer;
+    transition:.2s;
+    white-space:nowrap;
+}
+
+.telegram-button:hover{
+    background:#009ce8;
+    transform:translateY(-1px);
 }
 
 .telegram-button:disabled{
     opacity:.6;
-    cursor:not-allowed;
+    cursor:wait;
 }
 
-.rate-card{
-    padding:20px;
-    margin-bottom:18px;
-    border-radius:16px;
-    border:1px solid rgba(0,234,255,.3);
+/* ================= RATE ================= */
+
+.current-rate{
+    padding:18px;
+    border-radius:15px;
+    border:1px solid rgba(0,234,255,.35);
     background:
         radial-gradient(
-            circle at 100% 0,
-            rgba(0,234,255,.12),
-            transparent 45%
+            circle at 90% 10%,
+            rgba(0,234,255,.1),
+            transparent 40%
         ),
-        #091018;
+        #0b1118;
+    margin-bottom:18px;
 }
 
-.rate-label{
+.rate-caption{
     color:var(--muted);
-    font-size:.77rem;
+    font-size:.75rem;
+    margin-bottom:7px;
 }
 
-.rate-value{
-    margin-top:5px;
+.rate-big{
+    font-size:1.7rem;
+    font-weight:900;
     color:var(--cyan);
-    font-size:2rem;
-    font-weight:950;
 }
 
 .rate-source{
-    margin-top:5px;
-    color:#667484;
+    margin-top:7px;
+    color:#728092;
     font-size:.75rem;
 }
 
-.info{
-    padding:14px;
-    margin-top:15px;
-    border-left:3px solid var(--cyan);
-    border-radius:10px;
-    color:var(--muted);
+.rates-title{
+    margin:21px 0 10px;
+    font-size:.9rem;
+    font-weight:850;
+}
+
+.rates-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.rate-item{
+    padding:12px;
+    border:1px solid var(--border);
     background:rgba(255,255,255,.025);
-    font-size:.78rem;
+    border-radius:10px;
+}
+
+.rate-name{
+    color:var(--muted);
+    font-size:.72rem;
+    margin-bottom:4px;
+}
+
+.rate-number{
+    font-weight:850;
+    font-size:.94rem;
+}
+
+@media(max-width:500px){
+    .rates-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ================= INFO ================= */
+
+.info{
+    margin-top:18px;
+    padding:13px 14px;
+    border-left:3px solid var(--cyan);
+    border-radius:9px;
+    background:rgba(0,234,255,.035);
+    color:var(--muted);
+    font-size:.77rem;
     line-height:1.55;
 }
 
-.results{
-    margin-top:20px;
-    padding:26px;
-    border-radius:22px;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(17,24,33,.98),
-            rgba(8,13,19,.98)
-        );
-    border:1px solid var(--border);
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.4);
-}
+/* ================= RESULTS ================= */
 
-.hidden{
+.results{
+    margin-top:22px;
     display:none;
 }
 
-.error-box{
-    padding:14px;
-    margin-bottom:18px;
-    border-left:3px solid var(--red);
-    border-radius:10px;
-    color:#ff9ba2;
-    background:rgba(255,89,100,.07);
-    font-size:.85rem;
-    line-height:1.5;
+.results.visible{
+    display:block;
 }
 
 .total{
+    padding:30px 20px;
     text-align:center;
-    padding:10px 0 25px;
+    border-bottom:1px solid var(--border);
+    background:
+        radial-gradient(
+            circle at 50% 0,
+            rgba(0,234,255,.1),
+            transparent 55%
+        );
 }
 
 .total-label{
     color:var(--muted);
-    font-size:.76rem;
     text-transform:uppercase;
-    letter-spacing:1.5px;
+    letter-spacing:1.3px;
+    font-size:.72rem;
+    font-weight:750;
 }
 
 .total-value{
-    margin-top:9px;
+    margin-top:10px;
     color:var(--cyan);
-    font-size:clamp(2.3rem,7vw,4rem);
-    line-height:1;
+    font-size:clamp(2.3rem,6vw,4rem);
     font-weight:950;
     letter-spacing:-2px;
+    text-shadow:0 0 30px rgba(0,234,255,.22);
 }
 
-.result-grid{
+.results-body{
+    padding:24px;
+}
+
+.details{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:0;
 }
 
 .detail{
     display:flex;
     justify-content:space-between;
-    gap:15px;
-    padding:15px;
-    border:1px solid rgba(255,255,255,.045);
-    border-radius:12px;
-    background:rgba(255,255,255,.02);
+    align-items:center;
+    gap:20px;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
 }
 
 .detail-name{
     color:var(--muted);
-    font-size:.84rem;
+    font-size:.85rem;
 }
 
 .detail-value{
+    font-size:.9rem;
     font-weight:850;
     text-align:right;
 }
 
-.section-title{
-    grid-column:1/-1;
-    margin:18px 0 2px;
-    font-size:1rem;
+.section{
+    margin:25px 0 8px;
+    color:var(--cyan);
+    font-size:.9rem;
     font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:1px;
 }
+
+.error-box{
+    margin:20px 24px 0;
+    padding:13px 15px;
+    border-radius:10px;
+    color:var(--red);
+    background:rgba(255,82,99,.07);
+    border:1px solid rgba(255,82,99,.2);
+    font-size:.85rem;
+}
+
+/* ================= FOOTER ================= */
 
 .footer{
-    margin:20px auto 0;
-    max-width:850px;
     text-align:center;
-    color:#596675;
+    color:#526070;
     font-size:.72rem;
-    line-height:1.5;
+    margin:28px 0 10px;
 }
 
-@media(max-width:900px){
-    .grid{
-        grid-template-columns:1fr;
-    }
+/* ================= LOADING ================= */
+
+.loading{
+    animation:pulse 1.3s infinite;
 }
 
-@media(max-width:600px){
-    body{
-        padding:12px;
-    }
-
-    .panel,
-    .results{
-        padding:17px;
-        border-radius:17px;
-    }
-
-    .row,
-    .result-grid{
-        grid-template-columns:1fr;
-    }
-
-    .expense{
-        grid-template-columns:1fr 105px;
-    }
-
-    .logo{
-        font-size:2.1rem;
-    }
-
-    .logo-icon{
-        width:40px;
-        height:40px;
+@keyframes pulse{
+    50%{
+        opacity:.45;
     }
 }
 </style>
@@ -495,236 +604,293 @@ select:focus{
 
 <div class="container">
 
-<header>
+<header class="header">
 
     <div class="logo">
-        <span class="logo-icon">₽</span>
-        <span>CalcCardash</span>
+        <span class="logo-dot"></span>
+        CALCCARDASH.RU
     </div>
 
-    <div class="subtitle">
-        Калькулятор растаможки автомобилей
-    </div>
+    <h1>
+        Расчёт <span>растаможки</span>
+    </h1>
 
-    <div class="year">
-        ● Расчётная модель 2026
-    </div>
+    <p class="subtitle">
+        Калькулятор стоимости автомобиля с актуальными курсами Telegram
+    </p>
 
 </header>
 
 
-<div class="grid">
+<div class="main-grid">
 
 <!-- =====================================================
      АВТОМОБИЛЬ
 ===================================================== -->
 
-<section class="panel">
+<section class="card">
 
-    <div class="panel-header">
+    <div class="card-header">
 
-        <div class="panel-title">
-            Параметры автомобиля
+        <div>
+            <div class="card-title">
+                Параметры автомобиля
+            </div>
+
+            <div class="card-subtitle">
+                Данные для расчёта таможенных платежей
+            </div>
         </div>
 
-        <div class="badge success">
+        <span class="status success">
             2026
-        </div>
+        </span>
 
     </div>
 
 
-    <div class="form-group">
-
-        <label>
-            Автомобиль ввозит
-        </label>
-
-        <select id="ownerType">
-
-            <option value="phys">
-                Физическое лицо — личное использование
-            </option>
-
-            <option value="legal">
-                Юридическое лицо / коммерческий ввоз
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>
-            Возраст автомобиля
-        </label>
-
-        <select id="ageGroup">
-
-            <option value="less_3">
-                До 3 лет
-            </option>
-
-            <option value="3_5">
-                От 3 до 5 лет
-            </option>
-
-            <option value="5_7">
-                От 5 до 7 лет
-            </option>
-
-            <option value="more_7">
-                Старше 7 лет
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>
-            Тип двигателя
-        </label>
-
-        <select id="engineType">
-
-            <option value="petrol">
-                Бензин
-            </option>
-
-            <option value="diesel">
-                Дизель
-            </option>
-
-            <option value="hybrid">
-                Гибрид
-            </option>
-
-            <option value="ev">
-                Электромобиль
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <div class="row">
+    <div class="card-body">
 
         <div class="form-group">
 
             <label>
-                Мощность, л.с.
+                Страна / способ оплаты
             </label>
-
-            <input
-                id="power"
-                type="number"
-                min="0"
-                placeholder="150"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Объём, см³
-            </label>
-
-            <input
-                id="volume"
-                type="number"
-                min="0"
-                placeholder="1998"
-            >
-
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>
-            Стоимость автомобиля
-        </label>
-
-        <div class="expense">
-
-            <input
-                id="price"
-                type="number"
-                min="0"
-                placeholder="2800000"
-            >
 
             <select id="priceCurrency">
 
                 <option value="JPY_INTERNAL">
-                    JPY
+                    🇯🇵 Япония (JPY) — Внутренний перевод
+                </option>
+
+                <option value="JPY_SWIFT">
+                    🇯🇵 Япония (JPY) — SWIFT
+                </option>
+
+                <option value="JPY_CASH">
+                    🇯🇵 Япония (JPY) — AFA Trading (Наличные)
+                </option>
+
+                <option value="JPY_QR">
+                    🇯🇵 Япония (JPY) — AFA Trading (QR)
                 </option>
 
                 <option value="CNY">
-                    CNY
+                    🇨🇳 Китай (CNY)
                 </option>
 
                 <option value="KRW">
-                    KRW
+                    🇰🇷 Южная Корея (KRW)
                 </option>
 
                 <option value="THB">
-                    THB
+                    🇹🇭 Таиланд (THB)
                 </option>
 
                 <option value="AED">
-                    AED
+                    🇦🇪 ОАЭ (AED)
                 </option>
 
                 <option value="USD_SWIFT">
-                    USD
+                    🇺🇸 USD — SWIFT
+                </option>
+
+                <option value="USD_IDUBID">
+                    🇺🇸 USD — IDUBID
                 </option>
 
             </select>
 
         </div>
 
+
+        <div class="form-group">
+
+            <label>
+                Тип владельца
+            </label>
+
+            <select id="ownerType">
+
+                <option value="phys">
+                    Физическое лицо
+                </option>
+
+                <option value="legal">
+                    Юридическое лицо
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Тип транспортного средства
+            </label>
+
+            <select id="engineType">
+
+                <option value="petrol">
+                    ДВС — бензин
+                </option>
+
+                <option value="diesel">
+                    ДВС — дизель
+                </option>
+
+                <option value="hybrid">
+                    Гибрид
+                </option>
+
+                <option value="series_hybrid">
+                    Последовательный гибрид
+                </option>
+
+                <option value="ev">
+                    Электромобиль
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label>
+                    Цена автомобиля
+                </label>
+
+                <input
+                    id="price"
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Например: 2500000"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Год выпуска
+                </label>
+
+                <input
+                    id="year"
+                    type="number"
+                    min="1900"
+                    max="2026"
+                    placeholder="2023"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="form-group">
+
+                <label>
+                    Объём двигателя, см³
+                </label>
+
+                <input
+                    id="volume"
+                    type="number"
+                    min="0"
+                    placeholder="1490"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Мощность, л.с.
+                </label>
+
+                <input
+                    id="power"
+                    type="number"
+                    min="0"
+                    placeholder="150"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Возраст автомобиля
+            </label>
+
+            <select id="ageGroup">
+
+                <option value="less_3">
+                    Меньше 3-х лет
+                </option>
+
+                <option value="3_5">
+                    3–5 лет
+                </option>
+
+                <option value="5_7">
+                    5–7 лет
+                </option>
+
+                <option value="more_7">
+                    Больше 7 лет
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Автомобиль старше 30 лет и является историческим?
+            </label>
+
+            <select id="classic">
+
+                <option value="no">
+                    Нет
+                </option>
+
+                <option value="yes">
+                    Да
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="calculate"
+            id="calculateBtn"
+            onclick="calculate()"
+        >
+            Рассчитать стоимость
+        </button>
+
     </div>
-
-
-    <div class="form-group">
-
-        <label>
-            Автомобиль старше 30 лет и оригинальной конструкции
-        </label>
-
-        <select id="classic">
-
-            <option value="no">
-                Нет
-            </option>
-
-            <option value="yes">
-                Да
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <button
-        class="calculate"
-        id="calculateBtn"
-        type="button"
-    >
-        Рассчитать растаможку
-    </button>
 
 </section>
 
@@ -733,197 +899,358 @@ select:focus{
      КУРСЫ
 ===================================================== -->
 
-<section class="panel">
+<section class="card">
 
-    <div class="panel-header">
+    <div class="card-header">
 
-        <div class="panel-title">
-            Курсы и расходы
+        <div>
+            <div class="card-title">
+                Курсы и расходы
+            </div>
+
+            <div class="card-subtitle">
+                Курсы получаются с твоего Telegram-сервера
+            </div>
         </div>
 
-        <div
-            class="badge loading"
+        <span
             id="rateStatus"
+            class="status loading"
         >
-            Загрузка...
-        </div>
+            Загрузка
+        </span>
 
     </div>
 
 
-    <div class="telegram-box">
+    <div class="card-body">
 
-        <div class="telegram-title">
-            📱 Курсы Telegram
+
+        <div class="telegram">
+
+            <div class="telegram-top">
+
+                <div>
+                    <div class="telegram-title">
+                        📱 Telegram
+                    </div>
+
+                    <div
+                        id="telegramStatus"
+                        class="telegram-description"
+                    >
+                        Подключение к серверу...
+                    </div>
+                </div>
+
+
+                <button
+                    class="telegram-button"
+                    id="telegramButton"
+                    onclick="loadTelegramRates()"
+                >
+                    Обновить
+                </button>
+
+            </div>
+
         </div>
 
-        <div
-            class="telegram-status"
-            id="telegramStatus"
-        >
-            Подключение к серверу...
+
+        <div class="current-rate">
+
+            <div class="rate-caption">
+                Текущий курс — RUB за 1 единицу валюты
+            </div>
+
+            <div
+                id="carRate"
+                class="rate-big"
+            >
+                —
+            </div>
+
+            <div
+                id="rateSource"
+                class="rate-source"
+            >
+                Источник: —
+            </div>
+
         </div>
 
-        <button
-            class="telegram-button"
-            id="telegramButton"
-            type="button"
-        >
-            Обновить курсы
-        </button>
 
-    </div>
-
-
-    <div class="rate-card">
-
-        <div class="rate-label">
-            Курс выбранной валюты
+        <div class="rates-title">
+            Полученные курсы
         </div>
 
-        <div
-            class="rate-value"
-            id="carRate"
-        >
-            —
+
+        <div class="rates-grid">
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    USD SWIFT
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateUSD"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    USD IDUBID
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateUSDID"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    JPY SWIFT
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateJPYSWIFT"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    JPY Internal
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateJPY"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    JPY AFA Cash
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateJPYCASH"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    JPY AFA QR
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateJPYQR"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    KRW
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateKRW"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    AED
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateAED"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    CNY
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateCNY"
+                >
+                    —
+                </div>
+            </div>
+
+
+            <div class="rate-item">
+                <div class="rate-name">
+                    THB
+                </div>
+                <div
+                    class="rate-number"
+                    id="rateTHB"
+                >
+                    —
+                </div>
+            </div>
+
         </div>
 
-        <div
-            class="rate-source"
-            id="rateSource"
-        >
-            —
-        </div>
 
-    </div>
+        <div class="form-group" style="margin-top:20px">
 
-
-    <div class="form-group">
-
-        <label>
-            Курс EUR для таможенных платежей
-        </label>
-
-        <input
-            id="eurRate"
-            type="number"
-            min="0"
-            step="0.0001"
-            value="96.8601"
-        >
-
-        <div class="rate-source">
-            Можно изменить вручную.
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>
-            Комиссия компании
-        </label>
-
-        <div class="expense">
+            <label>
+                Ручной курс USD
+            </label>
 
             <input
-                id="commission"
+                id="manualUSD"
                 type="number"
-                min="0"
-                value="50000"
+                step="0.01"
+                placeholder="Если пусто — Telegram"
             >
 
-            <select id="commissionCurrency">
-
-                <option value="RUB">RUB</option>
-                <option value="USD_SWIFT">USD</option>
-                <option value="JPY_INTERNAL">JPY</option>
-                <option value="CNY">CNY</option>
-                <option value="KRW">KRW</option>
-                <option value="AED">AED</option>
-                <option value="THB">THB</option>
-
-            </select>
+            <div
+                class="telegram-description"
+            >
+                Если поле заполнено, для USD используется
+                указанный курс.
+            </div>
 
         </div>
 
-    </div>
 
+        <div class="form-group">
 
-    <div class="form-group">
+            <label>
+                Комиссия компании
+            </label>
 
-        <label>
-            Фрахт / доставка
-        </label>
+            <div class="input-with-select">
 
-        <div class="expense">
+                <input
+                    id="commission"
+                    type="number"
+                    value="50000"
+                    min="0"
+                >
 
-            <input
-                id="freight"
-                type="number"
-                min="0"
-                value="250"
-            >
+                <select id="commissionCurrency">
 
-            <select id="freightCurrency">
+                    <option value="RUB">RUB</option>
+                    <option value="USD_SWIFT">USD</option>
+                    <option value="JPY_INTERNAL">JPY</option>
+                    <option value="CNY">CNY</option>
+                    <option value="KRW">KRW</option>
+                    <option value="AED">AED</option>
+                    <option value="THB">THB</option>
 
-                <option value="USD_SWIFT">USD</option>
-                <option value="RUB">RUB</option>
-                <option value="JPY_INTERNAL">JPY</option>
-                <option value="CNY">CNY</option>
-                <option value="KRW">KRW</option>
-                <option value="AED">AED</option>
-                <option value="THB">THB</option>
+                </select>
 
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-        <label>
-            СВХ и брокер
-        </label>
-
-        <div class="expense">
-
-            <input
-                id="svh"
-                type="number"
-                min="0"
-                value="70000"
-            >
-
-            <select id="svhCurrency">
-
-                <option value="RUB">RUB</option>
-                <option value="USD_SWIFT">USD</option>
-                <option value="JPY_INTERNAL">JPY</option>
-                <option value="CNY">CNY</option>
-                <option value="KRW">KRW</option>
-                <option value="AED">AED</option>
-                <option value="THB">THB</option>
-
-            </select>
+            </div>
 
         </div>
 
-    </div>
+
+        <div class="form-group">
+
+            <label>
+                Фрахт
+            </label>
+
+            <div class="input-with-select">
+
+                <input
+                    id="freight"
+                    type="number"
+                    value="250"
+                    min="0"
+                >
+
+                <select id="freightCurrency">
+
+                    <option value="USD_SWIFT">USD</option>
+                    <option value="RUB">RUB</option>
+                    <option value="JPY_INTERNAL">JPY</option>
+                    <option value="CNY">CNY</option>
+                    <option value="KRW">KRW</option>
+                    <option value="AED">AED</option>
+                    <option value="THB">THB</option>
+
+                </select>
+
+            </div>
+
+        </div>
 
 
-    <div class="info">
+        <div class="form-group">
 
-        <b>Источник курсов:</b>
-        Telegram → твой сервер → калькулятор.
+            <label>
+                СВХ и брокер
+            </label>
 
-        <br><br>
+            <div class="input-with-select">
 
-        Расчётная модель основана на актуальных
-        таблицах CalcUs 2026.
+                <input
+                    id="svh"
+                    type="number"
+                    value="70000"
+                    min="0"
+                >
+
+                <select id="svhCurrency">
+
+                    <option value="RUB">RUB</option>
+                    <option value="USD_SWIFT">USD</option>
+                    <option value="JPY_INTERNAL">JPY</option>
+                    <option value="CNY">CNY</option>
+                    <option value="KRW">KRW</option>
+                    <option value="AED">AED</option>
+                    <option value="THB">THB</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="info">
+
+            <b>Источник курсов:</b>
+            Telegram → твой сервер Render → калькулятор.
+
+            <br><br>
+
+            Для JPY сервер может отдавать значение
+            <b>55.30 ₽ / 100 JPY</b>.
+            Калькулятор автоматически переводит его
+            в <b>0.553 ₽ / 1 JPY</b>.
+
+        </div>
 
     </div>
 
@@ -933,45 +1260,48 @@ select:focus{
 
 
 <!-- =====================================================
-     РЕЗУЛЬТАТ
+     RESULT
 ===================================================== -->
 
 <section
-    class="results hidden"
     id="results"
+    class="card results"
 >
 
     <div id="errorBox"></div>
 
+
     <div class="total">
 
         <div class="total-label">
-            Автомобиль + растаможка + расходы
+            Итоговая стоимость
         </div>
 
         <div
-            class="total-value"
             id="total"
+            class="total-value"
         >
             0 ₽
         </div>
 
     </div>
 
-    <div
-        class="result-grid"
-        id="details"
-    ></div>
+
+    <div class="results-body">
+
+        <div
+            id="details"
+            class="details"
+        ></div>
+
+    </div>
 
 </section>
 
 
-<div class="footer">
-    CalcCardash.ru • Предварительный расчёт.
-    Фактическая сумма зависит от документов,
-    таможенной стоимости автомобиля и условий
-    конкретного ввоза.
-</div>
+<footer class="footer">
+    CalcCardash.ru • Расчёт стоимости автомобиля
+</footer>
 
 </div>
 
@@ -979,31 +1309,40 @@ select:focus{
 <script>
 
 /* =========================================================
-   TELEGRAM API
+   API
 ========================================================= */
 
 const API_URL =
     "https://server-curs.onrender.com/api/rates";
 
 
-/*
- * Резервные значения.
- * Используются только если API недоступен.
- */
+/* =========================================================
+   FALLBACK
+========================================================= */
 
 const FALLBACK_RATES = {
 
-    JPY_INTERNAL:0.5550,
+    /*
+       Все значения внутри калькулятора —
+       RUB за 1 единицу валюты.
+    */
 
-    CNY:13.30,
+    JPY_INTERNAL: 0.5530,
+    JPY_SWIFT: 0.5530,
+    JPY_CASH: 0.5580,
+    JPY_QR: 0.5580,
 
-    KRW:0.0622,
+    CNY: 13.15,
 
-    THB:2.69,
+    KRW: 0.0636,
 
-    AED:22.90,
+    THB: 2.70,
 
-    USD_SWIFT:87.80
+    AED: 23.50,
+
+    USD_SWIFT: 87.20,
+
+    USD_IDUBID: 88.70
 
 };
 
@@ -1013,15 +1352,62 @@ let RATES = {
 };
 
 
-let usingFallback = true;
-
-
 /* =========================================================
-   DOM
+   НОРМАЛИЗАЦИЯ КУРСА
 ========================================================= */
 
-const $ = id =>
-    document.getElementById(id);
+function normalizeRate(value, currency){
+
+    const n = Number(value);
+
+    if (!Number.isFinite(n) || n <= 0){
+        return 0;
+    }
+
+    /*
+       JPY:
+       сервер может отдавать:
+       55.30 за 100 JPY
+
+       либо:
+       0.553 за 1 JPY
+
+       Определяем автоматически.
+    */
+
+    if (
+        currency.startsWith("JPY")
+    ){
+
+        if (n > 10){
+            return n / 100;
+        }
+
+        return n;
+    }
+
+
+    /*
+       KRW:
+       например:
+       63.60 за 1000 KRW
+
+       или:
+       0.0636 за 1 KRW
+    */
+
+    if (currency === "KRW"){
+
+        if (n > 1){
+            return n / 1000;
+        }
+
+        return n;
+    }
+
+
+    return n;
+}
 
 
 /* =========================================================
@@ -1031,55 +1417,45 @@ const $ = id =>
 async function loadTelegramRates(){
 
     const status =
-        $("rateStatus");
+        document.getElementById("rateStatus");
 
     const telegramStatus =
-        $("telegramStatus");
+        document.getElementById("telegramStatus");
 
     const button =
-        $("telegramButton");
+        document.getElementById("telegramButton");
 
 
     button.disabled = true;
 
-    button.textContent =
-        "⏳ Загрузка...";
+    button.textContent = "Загрузка...";
 
-
-    status.textContent =
-        "Загрузка...";
+    status.textContent = "Загрузка";
 
     status.className =
-        "badge loading";
+        "status loading";
 
 
     telegramStatus.textContent =
-        "Получаем актуальные курсы...";
+        "Получаем актуальные курсы с сервера...";
 
 
     try{
 
         const response =
             await fetch(
-                API_URL +
-                "?t=" +
-                Date.now(),
+                API_URL + "?t=" + Date.now(),
                 {
                     method:"GET",
-                    cache:"no-store",
-                    headers:{
-                        "Accept":
-                            "application/json"
-                    }
+                    cache:"no-store"
                 }
             );
 
 
-        if(!response.ok){
+        if (!response.ok){
 
             throw new Error(
-                "HTTP " +
-                response.status
+                "HTTP " + response.status
             );
 
         }
@@ -1089,7 +1465,13 @@ async function loadTelegramRates(){
             await response.json();
 
 
-        if(
+        console.log(
+            "Ответ сервера:",
+            data
+        );
+
+
+        if (
             !data ||
             !data.rates
         ){
@@ -1105,83 +1487,131 @@ async function loadTelegramRates(){
             data.rates;
 
 
-        const read =
-            (value,fallback) => {
-
-                const n =
-                    Number(value);
-
-                return (
-                    Number.isFinite(n) &&
-                    n > 0
-                )
-                    ? n
-                    : fallback;
-
-            };
-
+        /*
+           JPY
+        */
 
         RATES.JPY_INTERNAL =
-            read(
-                r.JPY,
-                FALLBACK_RATES.JPY_INTERNAL
-            );
+            normalizeRate(
+                r.JPY_INTERNAL ??
+                r.JPY ??
+                r.JPY_SWIFT,
+                "JPY_INTERNAL"
+            )
+            || FALLBACK_RATES.JPY_INTERNAL;
 
+
+        RATES.JPY_SWIFT =
+            normalizeRate(
+                r.JPY_SWIFT ??
+                r.JPY,
+                "JPY_SWIFT"
+            )
+            || FALLBACK_RATES.JPY_SWIFT;
+
+
+        RATES.JPY_CASH =
+            normalizeRate(
+                r.JPY_AFA ??
+                r.JPY_CASH ??
+                r.JPY_AFA_CASH,
+                "JPY_CASH"
+            )
+            || FALLBACK_RATES.JPY_CASH;
+
+
+        RATES.JPY_QR =
+            normalizeRate(
+                r.JPY_QR ??
+                r.JPY_AFA_QR,
+                "JPY_QR"
+            )
+            || FALLBACK_RATES.JPY_QR;
+
+
+        /*
+           USD
+        */
+
+        RATES.USD_SWIFT =
+            normalizeRate(
+                r.USD ??
+                r.USD_SWIFT,
+                "USD_SWIFT"
+            )
+            || FALLBACK_RATES.USD_SWIFT;
+
+
+        RATES.USD_IDUBID =
+            normalizeRate(
+                r.USD_IDUBID,
+                "USD_IDUBID"
+            )
+            || FALLBACK_RATES.USD_IDUBID;
+
+
+        /*
+           Остальные
+        */
 
         RATES.CNY =
-            read(
+            normalizeRate(
                 r.CNY,
-                FALLBACK_RATES.CNY
-            );
+                "CNY"
+            )
+            || FALLBACK_RATES.CNY;
 
 
         RATES.KRW =
-            read(
+            normalizeRate(
                 r.KRW,
-                FALLBACK_RATES.KRW
-            );
-
-
-        RATES.THB =
-            read(
-                r.THB,
-                FALLBACK_RATES.THB
-            );
+                "KRW"
+            )
+            || FALLBACK_RATES.KRW;
 
 
         RATES.AED =
-            read(
+            normalizeRate(
                 r.AED,
-                FALLBACK_RATES.AED
-            );
+                "AED"
+            )
+            || FALLBACK_RATES.AED;
 
 
-        RATES.USD_SWIFT =
-            read(
-                r.USD,
-                FALLBACK_RATES.USD_SWIFT
-            );
+        RATES.THB =
+            normalizeRate(
+                r.THB,
+                "THB"
+            )
+            || FALLBACK_RATES.THB;
 
 
-        usingFallback = false;
-
+        /*
+           Статус
+        */
 
         status.textContent =
             "Telegram ✓";
 
         status.className =
-            "badge success";
+            "status success";
 
 
-        telegramStatus.textContent =
-            "✅ Курсы получены из Telegram" +
-            (
-                data.source
-                    ? " • " +
-                      data.source
-                    : ""
-            );
+        telegramStatus.innerHTML =
+            "✅ Курсы успешно получены";
 
+        if (data.updated_at){
+
+            telegramStatus.innerHTML +=
+                "<br>Обновлено: " +
+                escapeHtml(
+                    String(data.updated_at)
+                );
+
+        }
+
+
+        updateRatesUI();
 
         updateCarRate();
 
@@ -1189,9 +1619,21 @@ async function loadTelegramRates(){
     }catch(error){
 
         console.error(
-            "Rates error:",
+            "Ошибка загрузки курсов:",
             error
         );
+
+
+        status.textContent =
+            "Резервные курсы";
+
+        status.className =
+            "status error";
+
+
+        telegramStatus.innerHTML =
+            "⚠️ Telegram/API временно недоступен." +
+            "<br>Используются последние резервные курсы.";
 
 
         RATES = {
@@ -1199,20 +1641,7 @@ async function loadTelegramRates(){
         };
 
 
-        usingFallback = true;
-
-
-        status.textContent =
-            "Резервный курс";
-
-        status.className =
-            "badge error";
-
-
-        telegramStatus.textContent =
-            "⚠️ Telegram API недоступен. " +
-            "Используются резервные значения.";
-
+        updateRatesUI();
 
         updateCarRate();
 
@@ -1221,10 +1650,118 @@ async function loadTelegramRates(){
         button.disabled = false;
 
         button.textContent =
-            "Обновить курсы";
+            "Обновить";
 
     }
+}
 
+
+/* =========================================================
+   UI RATES
+========================================================= */
+
+function moneyRate(value){
+
+    return (
+        Number(value) || 0
+    ).toLocaleString(
+        "ru-RU",
+        {
+            minimumFractionDigits:4,
+            maximumFractionDigits:4
+        }
+    ) + " ₽";
+}
+
+
+function rateJPY100(value){
+
+    return (
+        (Number(value) || 0) * 100
+    ).toLocaleString(
+        "ru-RU",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    ) + " ₽ / 100";
+}
+
+
+function rateKRW1000(value){
+
+    return (
+        (Number(value) || 0) * 1000
+    ).toLocaleString(
+        "ru-RU",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    ) + " ₽ / 1000";
+}
+
+
+function updateRatesUI(){
+
+    document.getElementById(
+        "rateUSD"
+    ).textContent =
+        moneyRate(RATES.USD_SWIFT);
+
+
+    document.getElementById(
+        "rateUSDID"
+    ).textContent =
+        moneyRate(RATES.USD_IDUBID);
+
+
+    document.getElementById(
+        "rateJPYSWIFT"
+    ).textContent =
+        rateJPY100(RATES.JPY_SWIFT);
+
+
+    document.getElementById(
+        "rateJPY"
+    ).textContent =
+        rateJPY100(RATES.JPY_INTERNAL);
+
+
+    document.getElementById(
+        "rateJPYCASH"
+    ).textContent =
+        rateJPY100(RATES.JPY_CASH);
+
+
+    document.getElementById(
+        "rateJPYQR"
+    ).textContent =
+        rateJPY100(RATES.JPY_QR);
+
+
+    document.getElementById(
+        "rateKRW"
+    ).textContent =
+        rateKRW1000(RATES.KRW);
+
+
+    document.getElementById(
+        "rateAED"
+    ).textContent =
+        moneyRate(RATES.AED);
+
+
+    document.getElementById(
+        "rateCNY"
+    ).textContent =
+        moneyRate(RATES.CNY);
+
+
+    document.getElementById(
+        "rateTHB"
+    ).textContent =
+        moneyRate(RATES.THB);
 }
 
 
@@ -1234,47 +1771,136 @@ async function loadTelegramRates(){
 
 function getRate(currency){
 
-    if(currency === "RUB")
+    if(currency === "RUB"){
         return 1;
+    }
 
 
-    return Number(
-        RATES[currency]
-    ) || 0;
+    if(
+        currency === "USD_SWIFT"
+    ){
 
+        const manual =
+            Number(
+                document.getElementById(
+                    "manualUSD"
+                ).value
+            );
+
+
+        if(
+            Number.isFinite(manual) &&
+            manual > 0
+        ){
+
+            return manual;
+
+        }
+
+    }
+
+
+    return (
+        Number(
+            RATES[currency]
+        ) || 0
+    );
 }
 
 
 function updateCarRate(){
 
     const currency =
-        $("priceCurrency").value;
+        document.getElementById(
+            "priceCurrency"
+        ).value;
 
 
     const rate =
         getRate(currency);
 
 
-    $("carRate").textContent =
-        rate
-            ? rate.toFixed(4) + " ₽"
-            : "—";
+    const carRate =
+        document.getElementById(
+            "carRate"
+        );
 
 
-    $("rateSource").textContent =
-        (
-            usingFallback
-                ? "Резервный курс"
-                : "Telegram"
-        ) +
+    if(!rate){
+
+        carRate.textContent =
+            "—";
+
+        return;
+
+    }
+
+
+    if(currency.startsWith("JPY")){
+
+        carRate.textContent =
+            rateJPY100(rate);
+
+    }else if(currency === "KRW"){
+
+        carRate.textContent =
+            rateKRW1000(rate);
+
+    }else{
+
+        carRate.textContent =
+            moneyRate(rate);
+
+    }
+
+
+    let source =
+        "Telegram";
+
+
+    if(
+        currency === "USD_SWIFT" &&
+        Number(
+            document.getElementById(
+                "manualUSD"
+            ).value
+        ) > 0
+    ){
+
+        source =
+            "Вручную";
+
+    }
+
+
+    document.getElementById(
+        "rateSource"
+    ).textContent =
+        "Источник: " +
+        source +
         " • " +
         currency;
-
 }
 
 
+document
+    .getElementById("priceCurrency")
+    .addEventListener(
+        "change",
+        updateCarRate
+    );
+
+
+document
+    .getElementById("manualUSD")
+    .addEventListener(
+        "input",
+        updateCarRate
+    );
+
+
 /* =========================================================
-   ТАМОЖЕННЫЙ СБОР 2026
+   CUSTOMS FEE
 ========================================================= */
 
 function getCustomsFee(priceRub){
@@ -1301,12 +1927,11 @@ function getCustomsFee(priceRub){
         return 49240;
 
     return 73860;
-
 }
 
 
 /* =========================================================
-   ПОШЛИНА ФИЗЛИЦА < 3 ЛЕТ
+   PHYSICAL UNDER 3
 ========================================================= */
 
 function dutyPhysUnder3(
@@ -1315,52 +1940,51 @@ function dutyPhysUnder3(
 ){
 
     let percent;
-    let min;
+    let minPerCm;
 
 
     if(priceEUR <= 8500){
 
-        percent = 0.54;
-        min = 2.5;
+        percent = .54;
+        minPerCm = 2.5;
 
     }else if(priceEUR <= 16700){
 
-        percent = 0.48;
-        min = 3.5;
+        percent = .48;
+        minPerCm = 3.5;
 
     }else if(priceEUR <= 42300){
 
-        percent = 0.48;
-        min = 5.5;
+        percent = .48;
+        minPerCm = 5.5;
 
     }else if(priceEUR <= 84500){
 
-        percent = 0.48;
-        min = 7.5;
+        percent = .48;
+        minPerCm = 7.5;
 
     }else if(priceEUR <= 169000){
 
-        percent = 0.48;
-        min = 15;
+        percent = .48;
+        minPerCm = 15;
 
     }else{
 
-        percent = 0.48;
-        min = 20;
+        percent = .48;
+        minPerCm = 20;
 
     }
 
 
     return Math.max(
         priceEUR * percent,
-        volume * min
+        volume * minPerCm
     );
-
 }
 
 
 /* =========================================================
-   ПОШЛИНА ФИЗЛИЦА > 3 ЛЕТ
+   PHYSICAL OLDER
 ========================================================= */
 
 function dutyPhysOlder(
@@ -1368,7 +1992,7 @@ function dutyPhysOlder(
     volume
 ){
 
-    const old =
+    const older =
         age === "5_7" ||
         age === "more_7";
 
@@ -1376,7 +2000,7 @@ function dutyPhysOlder(
     let rate;
 
 
-    if(!old){
+    if(!older){
 
         if(volume <= 1000)
             rate = 1.5;
@@ -1420,12 +2044,11 @@ function dutyPhysOlder(
 
 
     return volume * rate;
-
 }
 
 
 /* =========================================================
-   БЕНЗИН — ЮРЛИЦО
+   LEGAL PETROL / HYBRID
 ========================================================= */
 
 function dutyLegalPetrol(
@@ -1436,13 +2059,12 @@ function dutyLegalPetrol(
 
     if(age === "less_3"){
 
-        return priceEUR *
-            (
-                volume > 2800
-                    ? 0.125
-                    : 0.15
-            );
+        const percent =
+            volume > 2800
+                ? .125
+                : .15;
 
+        return priceEUR * percent;
     }
 
 
@@ -1455,32 +2077,31 @@ function dutyLegalPetrol(
 
 
         if(volume <= 1000)
-            min = 0.36;
+            min = .36;
 
         else if(volume <= 1500)
-            min = 0.40;
+            min = .40;
 
         else if(volume <= 1800)
-            min = 0.36;
+            min = .36;
 
         else if(volume <= 2300)
-            min = 0.44;
+            min = .44;
 
         else if(volume <= 2800)
-            min = 0.44;
+            min = .44;
 
         else if(volume <= 3000)
-            min = 0.44;
+            min = .44;
 
         else
-            min = 0.80;
+            min = .80;
 
 
         return Math.max(
-            priceEUR * 0.20,
+            priceEUR * .20,
             volume * min
         );
-
     }
 
 
@@ -1507,12 +2128,11 @@ function dutyLegalPetrol(
 
 
     return volume * rate;
-
 }
 
 
 /* =========================================================
-   ДИЗЕЛЬ — ЮРЛИЦО
+   DIESEL
 ========================================================= */
 
 function dutyLegalDiesel(
@@ -1521,8 +2141,9 @@ function dutyLegalDiesel(
     priceEUR
 ){
 
-    if(age === "less_3")
-        return priceEUR * 0.15;
+    if(age === "less_3"){
+        return priceEUR * .15;
+    }
 
 
     if(
@@ -1534,36 +2155,41 @@ function dutyLegalDiesel(
 
 
         if(volume <= 1500)
-            min = 0.32;
+            min = .32;
 
         else if(volume <= 2500)
-            min = 0.40;
+            min = .40;
 
         else
-            min = 0.80;
+            min = .80;
 
 
         return Math.max(
-            priceEUR * 0.20,
+            priceEUR * .20,
             volume * min
         );
-
     }
 
 
+    let rate;
+
+
     if(volume <= 1500)
-        return volume * 1.5;
+        rate = 1.5;
 
-    if(volume <= 2500)
-        return volume * 2.2;
+    else if(volume <= 2500)
+        rate = 2.2;
 
-    return volume * 3.2;
+    else
+        rate = 3.2;
 
+
+    return volume * rate;
 }
 
 
 /* =========================================================
-   ПОШЛИНА
+   DUTY
 ========================================================= */
 
 function getCustomsDuty({
@@ -1575,16 +2201,17 @@ function getCustomsDuty({
 }){
 
     /*
-     * CalcUs:
-     * электромобиль — 15%.
-     */
+       EV
+    */
 
     if(engine === "ev"){
-
-        return priceEUR * 0.15;
-
+        return priceEUR * .15;
     }
 
+
+    /*
+       Физлицо
+    */
 
     if(owner === "phys"){
 
@@ -1606,6 +2233,10 @@ function getCustomsDuty({
     }
 
 
+    /*
+       Юрлицо
+    */
+
     if(engine === "diesel"){
 
         return dutyLegalDiesel(
@@ -1617,21 +2248,16 @@ function getCustomsDuty({
     }
 
 
-    /*
-     * Бензин + гибрид.
-     */
-
     return dutyLegalPetrol(
         age,
         volume,
         priceEUR
     );
-
 }
 
 
 /* =========================================================
-   АКЦИЗ 2026
+   EXCISE
 ========================================================= */
 
 function getExcise(
@@ -1640,19 +2266,11 @@ function getExcise(
     engine
 ){
 
-    /*
-     * CalcUs:
-     * ДВС — только юридические лица.
-     * Электромобиль — физлица и юрлица.
-     */
-
     if(
         owner !== "legal" &&
         engine !== "ev"
     ){
-
         return 0;
-
     }
 
 
@@ -1675,37 +2293,22 @@ function getExcise(
         return power * 1771;
 
     return power * 1829;
-
 }
 
 
 /* =========================================================
-   НДС
+   VAT
 ========================================================= */
 
-function getVAT({
+function getVAT(
     priceRub,
     dutyRub,
     excise,
-    owner,
-    engine
-}){
+    owner
+){
 
-    /*
-     * ДВС:
-     * НДС только юрлицо.
-     *
-     * EV:
-     * НДС физлицо + юрлицо.
-     */
-
-    if(
-        owner !== "legal" &&
-        engine !== "ev"
-    ){
-
+    if(owner !== "legal"){
         return 0;
-
     }
 
 
@@ -1713,16 +2316,15 @@ function getVAT({
         priceRub +
         dutyRub +
         excise
-    ) * 0.20;
-
+    ) * .20;
 }
 
 
 /* =========================================================
-   УТИЛЬСБОР
+   UTILIZATION
 ========================================================= */
 
-function getUtilization({
+function getUtilizationFee({
     owner,
     age,
     engine,
@@ -1736,57 +2338,43 @@ function getUtilization({
             : 20000;
 
 
-    /*
-     * Льготный утиль.
-     *
-     * Физлицо,
-     * личное использование,
-     * ДВС <= 3.0 л,
-     * мощность <= 160 л.с.
-     *
-     * EV <= 80 л.с.
-     */
-
     if(owner === "phys"){
 
-        let eligible = false;
+        let loyalty = false;
 
 
         if(engine === "ev"){
 
-            eligible =
-                power <= 80;
+            if(power <= 80){
+                loyalty = true;
+            }
 
         }else{
 
-            eligible =
+            if(
                 volume <= 3000 &&
-                power <= 160;
+                power <= 160
+            ){
+                loyalty = true;
+            }
 
         }
 
 
-        if(eligible){
+        if(loyalty){
 
             const coefficient =
-                age === "less_3"
-                    ? 0.17
-                    : 0.26;
+                age === "less_3" ||
+                age === "3_5"
+                    ? .17
+                    : .26;
 
 
             return base * coefficient;
-
         }
 
     }
 
-
-    /*
-     * Коммерческий утиль.
-     *
-     * Коэффициенты оставлены
-     * в конфигурации ниже.
-     */
 
     let coefficient;
 
@@ -1794,62 +2382,67 @@ function getUtilization({
     if(engine === "ev"){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 9.12
                 : 10.10;
 
     }else if(power <= 160){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 9.12
                 : 10.10;
 
     }else if(power <= 200){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 17.42
                 : 20.96;
 
     }else if(power <= 300){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 26.87
                 : 30.28;
 
     }else if(power <= 400){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 33.14
                 : 45.64;
 
     }else if(power <= 500){
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 39.69
                 : 50.55;
 
     }else{
 
         coefficient =
-            age === "less_3"
+            age === "less_3" ||
+            age === "3_5"
                 ? 54.90
                 : 96.08;
-
     }
 
 
     return base * coefficient;
-
 }
 
 
 /* =========================================================
-   РАСХОД
+   EXPENSE
 ========================================================= */
 
 function getExpense(
@@ -1859,131 +2452,22 @@ function getExpense(
 
     const amount =
         Number(
-            $(amountId).value
+            document.getElementById(
+                amountId
+            ).value
         ) || 0;
 
 
     const currency =
-        $(currencyId).value;
+        document.getElementById(
+            currencyId
+        ).value;
 
-
-    const rate =
-        getRate(currency);
-
-
-    return amount * rate;
-
-}
-
-
-/* =========================================================
-   ФОРМАТ
-========================================================= */
-
-function rub(value){
 
     return (
-        Number(value) || 0
-    ).toLocaleString(
-        "ru-RU",
-        {
-            maximumFractionDigits:0
-        }
-    ) + " ₽";
-
-}
-
-
-function eur(value){
-
-    return (
-        Number(value) || 0
-    ).toLocaleString(
-        "ru-RU",
-        {
-            maximumFractionDigits:2
-        }
-    ) + " €";
-
-}
-
-
-/* =========================================================
-   DETAIL
-========================================================= */
-
-function addDetail(
-    name,
-    value,
-    currency="RUB"
-){
-
-    const div =
-        document.createElement("div");
-
-
-    div.className =
-        "detail";
-
-
-    div.innerHTML = `
-
-        <span class="detail-name">
-            ${escapeHtml(name)}
-        </span>
-
-        <span class="detail-value">
-            ${
-                currency === "EUR"
-                    ? eur(value)
-                    : rub(value)
-            }
-        </span>
-
-    `;
-
-
-    $("details")
-        .appendChild(div);
-
-}
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-function escapeHtml(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-function showError(message){
-
-    $("errorBox").innerHTML = `
-
-        <div class="error-box">
-            ${escapeHtml(message)}
-        </div>
-
-    `;
-
-
-    $("results")
-        .classList
-        .remove("hidden");
-
+        amount *
+        getRate(currency)
+    );
 }
 
 
@@ -1993,109 +2477,117 @@ function showError(message){
 
 function calculate(){
 
-    $("errorBox").innerHTML = "";
-
-
     const price =
         Number(
-            $("price").value
+            document.getElementById(
+                "price"
+            ).value
         ) || 0;
 
 
     const volume =
         Number(
-            $("volume").value
+            document.getElementById(
+                "volume"
+            ).value
         ) || 0;
 
 
     const power =
         Number(
-            $("power").value
+            document.getElementById(
+                "power"
+            ).value
         ) || 0;
 
 
     const owner =
-        $("ownerType").value;
+        document.getElementById(
+            "ownerType"
+        ).value;
 
 
     const age =
-        $("ageGroup").value;
+        document.getElementById(
+            "ageGroup"
+        ).value;
 
 
     const engine =
-        $("engineType").value;
-
-
-    const currency =
-        $("priceCurrency").value;
+        document.getElementById(
+            "engineType"
+        ).value;
 
 
     const eurRate =
-        Number(
-            $("eurRate").value
-        ) || 0;
+        96.8601;
+
+
+    const currency =
+        document.getElementById(
+            "priceCurrency"
+        ).value;
 
 
     const classic =
-        $("classic").value === "yes";
+        document.getElementById(
+            "classic"
+        ).value === "yes";
 
+
+    const results =
+        document.getElementById(
+            "results"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    errorBox.innerHTML = "";
+
+
+    /* ================= VALIDATION ================= */
 
     if(price <= 0){
 
-        showError(
-            "Укажите стоимость автомобиля."
-        );
+        errorBox.innerHTML =
+            "Укажите стоимость автомобиля.";
+
+        results.classList.add("visible");
 
         return;
-
     }
 
 
-    if(eurRate <= 0){
+    if(
+        engine !== "ev" &&
+        volume <= 0
+    ){
 
-        showError(
-            "Укажите корректный курс EUR."
-        );
+        errorBox.innerHTML =
+            "Укажите объём двигателя.";
+
+        results.classList.add("visible");
 
         return;
-
     }
 
 
-    if(engine !== "ev"){
+    if(
+        engine !== "ev" &&
+        power <= 0
+    ){
 
-        if(volume <= 0){
+        errorBox.innerHTML =
+            "Укажите мощность автомобиля.";
 
-            showError(
-                "Укажите объём двигателя."
-            );
-
-            return;
-
-        }
-
-
-        if(power <= 0){
-
-            showError(
-                "Укажите мощность двигателя."
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    if(engine === "ev" && power <= 0){
-
-        showError(
-            "Для электромобиля укажите мощность."
-        );
+        results.classList.add("visible");
 
         return;
-
     }
 
 
@@ -2103,36 +2595,28 @@ function calculate(){
         getRate(currency);
 
 
-    if(carRate <= 0){
+    if(!carRate){
 
-        showError(
-            "Курс выбранной валюты не загружен."
-        );
+        errorBox.innerHTML =
+            "Курс выбранной валюты не загружен.";
+
+        results.classList.add("visible");
 
         return;
-
     }
 
 
-    /*
-     * Цена авто в RUB.
-     */
+    /* ================= PRICE ================= */
 
     const priceRub =
         price * carRate;
 
 
-    /*
-     * Цена в EUR.
-     */
-
     const priceEUR =
         priceRub / eurRate;
 
 
-    /*
-     * Пошлина.
-     */
+    /* ================= DUTY ================= */
 
     const dutyEUR =
         getCustomsDuty({
@@ -2148,17 +2632,13 @@ function calculate(){
         dutyEUR * eurRate;
 
 
-    /*
-     * Таможенный сбор.
-     */
+    /* ================= CUSTOMS FEE ================= */
 
     const customsFee =
         getCustomsFee(priceRub);
 
 
-    /*
-     * Акциз.
-     */
+    /* ================= EXCISE ================= */
 
     const excise =
         getExcise(
@@ -2168,26 +2648,21 @@ function calculate(){
         );
 
 
-    /*
-     * НДС.
-     */
+    /* ================= VAT ================= */
 
     const vat =
-        getVAT({
+        getVAT(
             priceRub,
             dutyRub,
             excise,
-            owner,
-            engine
-        });
+            owner
+        );
 
 
-    /*
-     * Утиль.
-     */
+    /* ================= UTILIZATION ================= */
 
     let utilization =
-        getUtilization({
+        getUtilizationFee({
             owner,
             age,
             engine,
@@ -2196,21 +2671,12 @@ function calculate(){
         });
 
 
-    /*
-     * Раритет:
-     * освобождение от утильсбора.
-     */
-
     if(classic){
-
         utilization = 0;
-
     }
 
 
-    /*
-     * Дополнительные расходы.
-     */
+    /* ================= EXPENSES ================= */
 
     const commission =
         getExpense(
@@ -2233,9 +2699,7 @@ function calculate(){
         );
 
 
-    /*
-     * Все платежи.
-     */
+    /* ================= TOTAL ================= */
 
     const customsTotal =
         customsFee +
@@ -2245,10 +2709,6 @@ function calculate(){
         utilization;
 
 
-    /*
-     * Полная стоимость.
-     */
-
     const total =
         priceRub +
         customsTotal +
@@ -2257,15 +2717,21 @@ function calculate(){
         svh;
 
 
-    /*
-     * Вывод.
-     */
+    /* ================= OUTPUT ================= */
 
-    $("total").textContent =
+    document.getElementById(
+        "total"
+    ).textContent =
         rub(total);
 
 
-    $("details").innerHTML = "";
+    const details =
+        document.getElementById(
+            "details"
+        );
+
+
+    details.innerHTML = "";
 
 
     addDetail(
@@ -2277,7 +2743,7 @@ function calculate(){
     addDetail(
         "Цена автомобиля в EUR",
         priceEUR,
-        "EUR"
+        true
     );
 
 
@@ -2294,25 +2760,35 @@ function calculate(){
 
 
     addDetail(
-        "Акциз",
-        excise
-    );
-
-
-    addDetail(
-        "НДС",
-        vat
-    );
-
-
-    addDetail(
         "Утилизационный сбор",
         utilization
     );
 
 
+    if(owner === "legal"){
+
+        addDetail(
+            "Акциз",
+            excise
+        );
+
+
+        addDetail(
+            "НДС 20%",
+            vat
+        );
+
+    }
+
+
+    details.innerHTML +=
+        '<div class="section">' +
+        'Дополнительные расходы' +
+        '</div>';
+
+
     addDetail(
-        "Фрахт / доставка",
+        "Фрахт",
         freight
     );
 
@@ -2329,24 +2805,14 @@ function calculate(){
     );
 
 
-    const title =
-        document.createElement("div");
-
-
-    title.className =
-        "section-title";
-
-
-    title.textContent =
-        "ИТОГО";
-
-
-    $("details")
-        .appendChild(title);
+    details.innerHTML +=
+        '<div class="section">' +
+        'Итог' +
+        '</div>';
 
 
     addDetail(
-        "Таможенные платежи",
+        "Всего растаможка",
         customsTotal
     );
 
@@ -2357,64 +2823,106 @@ function calculate(){
     );
 
 
-    $("results")
-        .classList
-        .remove("hidden");
+    results.classList.add(
+        "visible"
+    );
 
 
-    setTimeout(() => {
-
-        $("results")
-            .scrollIntoView({
-                behavior:"smooth",
-                block:"start"
-            });
-
-    },50);
-
+    results.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
 }
 
 
 /* =========================================================
-   EVENTS
+   DETAILS
 ========================================================= */
 
-$("calculateBtn")
-    .addEventListener(
-        "click",
-        calculate
-    );
+function addDetail(
+    name,
+    value,
+    euro=false
+){
+
+    const details =
+        document.getElementById(
+            "details"
+        );
 
 
-$("telegramButton")
-    .addEventListener(
-        "click",
-        loadTelegramRates
-    );
+    const div =
+        document.createElement(
+            "div"
+        );
 
 
-$("priceCurrency")
-    .addEventListener(
-        "change",
-        updateCarRate
-    );
+    div.className =
+        "detail";
 
 
-document.addEventListener(
-    "keydown",
-    event => {
+    div.innerHTML = `
 
-        if(
-            event.key === "Enter" &&
-            event.target.tagName !== "SELECT"
-        ){
+        <span class="detail-name">
+            ${escapeHtml(name)}
+        </span>
 
-            calculate();
+        <span class="detail-value">
 
+            ${
+                euro
+                    ? number(value) + " €"
+                    : rub(value)
+            }
+
+        </span>
+
+    `;
+
+
+    details.appendChild(div);
+}
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function rub(value){
+
+    return (
+        Number(value) || 0
+    ).toLocaleString(
+        "ru-RU",
+        {
+            maximumFractionDigits:0
         }
+    ) + " ₽";
+}
 
-    }
-);
+
+function number(value){
+
+    return (
+        Number(value) || 0
+    ).toLocaleString(
+        "ru-RU",
+        {
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
 
 
 /* =========================================================
@@ -2425,15 +2933,17 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        updateRatesUI();
+
         updateCarRate();
 
         loadTelegramRates();
 
 
         /*
-         * Автообновление курсов
-         * каждые 10 минут.
-         */
+           Автоматически обновляем
+           курсы каждые 10 минут.
+        */
 
         setInterval(
             loadTelegramRates,
@@ -2447,4 +2957,3 @@ document.addEventListener(
 
 </body>
 </html>
-```

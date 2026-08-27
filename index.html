@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CalcCardash.ru — Расчёт растаможки авто</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    CalcCardash.ru — Расчёт растаможки авто
+</title>
 
 <style>
+
 :root{
     --bg:#070a0f;
     --bg2:#0b1017;
-    --card:rgba(17,23,32,.88);
-    --card2:#111821;
+    --card:#111821;
     --input:#0d131b;
     --border:#202b38;
     --text:#f5f7fa;
     --muted:#8e9aaa;
     --cyan:#00eaff;
-    --cyan2:#008cff;
+    --blue:#008cff;
     --green:#00e58a;
     --red:#ff5263;
     --yellow:#ffc857;
@@ -36,6 +44,8 @@ html{
 
 body{
     min-height:100vh;
+    padding:24px;
+
     font-family:
         Inter,
         -apple-system,
@@ -44,7 +54,9 @@ body{
         Roboto,
         Arial,
         sans-serif;
+
     color:var(--text);
+
     background:
         radial-gradient(
             circle at 15% 10%,
@@ -61,14 +73,16 @@ body{
             var(--bg),
             var(--bg2)
         );
-    padding:24px;
 }
 
 body:before{
     content:"";
+
     position:fixed;
     inset:0;
+
     pointer-events:none;
+
     background-image:
         linear-gradient(
             rgba(255,255,255,.018) 1px,
@@ -79,23 +93,30 @@ body:before{
             rgba(255,255,255,.018) 1px,
             transparent 1px
         );
+
     background-size:40px 40px;
-    mask-image:linear-gradient(
-        to bottom,
-        black,
-        transparent 80%
-    );
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 80%
+        );
 }
 
 .container{
     width:100%;
     max-width:1250px;
     margin:auto;
+
     position:relative;
     z-index:1;
 }
 
-/* ================= HEADER ================= */
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header{
     text-align:center;
@@ -106,19 +127,26 @@ body:before{
     display:inline-flex;
     align-items:center;
     gap:10px;
-    font-size:15px;
+
     color:var(--cyan);
+
+    font-size:15px;
     font-weight:800;
+
     letter-spacing:2px;
     text-transform:uppercase;
+
     margin-bottom:15px;
 }
 
 .logo-dot{
     width:9px;
     height:9px;
+
     border-radius:50%;
+
     background:var(--cyan);
+
     box-shadow:
         0 0 10px var(--cyan),
         0 0 25px var(--cyan);
@@ -127,14 +155,19 @@ body:before{
 h1{
     font-size:clamp(2rem,5vw,3.7rem);
     line-height:1;
+
     font-weight:900;
     letter-spacing:-2px;
+
     margin-bottom:14px;
 }
 
 h1 span{
     color:var(--cyan);
-    text-shadow:0 0 30px rgba(0,234,255,.35);
+
+    text-shadow:
+        0 0 30px
+        rgba(0,234,255,.35);
 }
 
 .subtitle{
@@ -142,44 +175,66 @@ h1 span{
     font-size:1rem;
 }
 
-/* ================= GRID ================= */
+
+/* =========================================================
+   GRID
+========================================================= */
 
 .main-grid{
     display:grid;
+
     grid-template-columns:
         minmax(0,1.05fr)
         minmax(0,.95fr);
+
     gap:22px;
 }
 
 @media(max-width:950px){
+
     .main-grid{
         grid-template-columns:1fr;
     }
+
 }
 
-/* ================= CARD ================= */
+
+/* =========================================================
+   CARD
+========================================================= */
 
 .card{
+
     background:
         linear-gradient(
             145deg,
             rgba(20,28,39,.94),
             rgba(11,16,23,.94)
         );
+
     border:1px solid var(--border);
+
     border-radius:22px;
+
     box-shadow:var(--shadow);
+
     overflow:hidden;
+
     backdrop-filter:blur(15px);
 }
 
 .card-header{
+
     padding:22px 24px;
-    border-bottom:1px solid var(--border);
+
+    border-bottom:
+        1px solid var(--border);
+
     display:flex;
+
     align-items:center;
     justify-content:space-between;
+
     gap:15px;
 }
 
@@ -198,76 +253,135 @@ h1 span{
     padding:24px;
 }
 
-/* ================= STATUS ================= */
+
+/* =========================================================
+   STATUS
+========================================================= */
 
 .status{
+
     display:inline-flex;
+
     align-items:center;
+
     gap:7px;
+
     padding:7px 11px;
+
     border-radius:999px;
+
     font-size:.75rem;
     font-weight:800;
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    background:
+        rgba(255,255,255,.035);
+
     white-space:nowrap;
 }
 
 .status:before{
+
     content:"";
+
     width:7px;
     height:7px;
+
     border-radius:50%;
+
     background:var(--yellow);
-    box-shadow:0 0 8px var(--yellow);
+
+    box-shadow:
+        0 0 8px var(--yellow);
 }
 
 .status.success{
+
     color:var(--green);
-    border-color:rgba(0,229,138,.25);
-    background:rgba(0,229,138,.06);
+
+    border-color:
+        rgba(0,229,138,.25);
+
+    background:
+        rgba(0,229,138,.06);
 }
 
 .status.success:before{
+
     background:var(--green);
-    box-shadow:0 0 9px var(--green);
+
+    box-shadow:
+        0 0 9px var(--green);
 }
 
 .status.error{
+
     color:var(--red);
-    border-color:rgba(255,82,99,.25);
-    background:rgba(255,82,99,.06);
+
+    border-color:
+        rgba(255,82,99,.25);
+
+    background:
+        rgba(255,82,99,.06);
 }
 
 .status.error:before{
+
     background:var(--red);
-    box-shadow:0 0 9px var(--red);
+
+    box-shadow:
+        0 0 9px var(--red);
 }
 
-/* ================= FORM ================= */
+.status.loading{
+    animation:pulse 1.3s infinite;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .form-group{
     margin-bottom:19px;
 }
 
 label{
+
     display:block;
+
     margin-bottom:8px;
+
     color:#b7c0cc;
+
     font-size:.82rem;
     font-weight:650;
 }
 
 input,
 select{
+
     width:100%;
+
     min-height:48px;
+
     padding:12px 14px;
+
     color:var(--text);
+
     background:var(--input);
-    border:1px solid var(--border);
+
+    border:
+        1px solid
+        var(--border);
+
     border-radius:11px;
+
     font-size:.94rem;
+
     transition:.2s;
 }
 
@@ -278,11 +392,17 @@ select:hover{
 
 input:focus,
 select:focus{
+
     outline:none;
+
     border-color:var(--cyan);
+
     box-shadow:
-        0 0 0 3px rgba(0,234,255,.08),
-        0 0 20px rgba(0,234,255,.05);
+        0 0 0 3px
+        rgba(0,234,255,.08),
+
+        0 0 20px
+        rgba(0,234,255,.05);
 }
 
 input::placeholder{
@@ -290,43 +410,66 @@ input::placeholder{
 }
 
 .row{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:14px;
 }
 
 @media(max-width:550px){
+
     .row{
         grid-template-columns:1fr;
         gap:0;
     }
+
 }
 
 .input-with-select{
+
     display:grid;
-    grid-template-columns:1fr 145px;
+
+    grid-template-columns:
+        1fr 145px;
+
     gap:8px;
 }
 
 @media(max-width:550px){
+
     .input-with-select{
         grid-template-columns:1fr;
     }
+
 }
 
-/* ================= BUTTON ================= */
+
+/* =========================================================
+   BUTTON
+========================================================= */
 
 .calculate{
+
     width:100%;
+
     min-height:57px;
+
     margin-top:7px;
+
     border:0;
+
     border-radius:13px;
+
     cursor:pointer;
+
     color:#001013;
+
     font-size:1rem;
     font-weight:900;
-    letter-spacing:.2px;
+
     background:
         linear-gradient(
             110deg,
@@ -334,42 +477,67 @@ input::placeholder{
             #00c8df 45%,
             #008cff
         );
+
     box-shadow:
-        0 10px 30px rgba(0,205,255,.18),
-        inset 0 1px 0 rgba(255,255,255,.4);
+        0 10px 30px
+        rgba(0,205,255,.18),
+
+        inset 0 1px 0
+        rgba(255,255,255,.4);
+
     transition:.2s;
 }
 
 .calculate:hover{
-    transform:translateY(-2px);
+
+    transform:
+        translateY(-2px);
+
     box-shadow:
-        0 15px 35px rgba(0,205,255,.25),
-        inset 0 1px 0 rgba(255,255,255,.4);
+        0 15px 35px
+        rgba(0,205,255,.25),
+
+        inset 0 1px 0
+        rgba(255,255,255,.4);
 }
 
 .calculate:active{
     transform:translateY(0);
 }
 
-/* ================= TELEGRAM ================= */
+
+/* =========================================================
+   TELEGRAM
+========================================================= */
 
 .telegram{
-    border:1px solid rgba(0,136,204,.3);
+
+    border:
+        1px solid
+        rgba(0,136,204,.3);
+
     background:
         linear-gradient(
             135deg,
             rgba(0,136,204,.11),
             rgba(0,136,204,.035)
         );
+
     border-radius:15px;
+
     padding:16px;
+
     margin-bottom:18px;
 }
 
 .telegram-top{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:10px;
 }
 
@@ -378,121 +546,200 @@ input::placeholder{
 }
 
 .telegram-description{
+
     margin-top:6px;
+
     color:var(--muted);
+
     font-size:.78rem;
+
     line-height:1.5;
 }
 
 .telegram-button{
+
     border:0;
+
     background:#0088cc;
+
     color:white;
+
     padding:10px 14px;
+
     border-radius:9px;
+
     font-weight:800;
+
     cursor:pointer;
+
     transition:.2s;
+
     white-space:nowrap;
 }
 
 .telegram-button:hover{
+
     background:#009ce8;
-    transform:translateY(-1px);
+
+    transform:
+        translateY(-1px);
 }
 
 .telegram-button:disabled{
+
     opacity:.6;
+
     cursor:wait;
 }
 
-/* ================= RATE ================= */
+
+/* =========================================================
+   RATE
+========================================================= */
 
 .current-rate{
+
     padding:18px;
+
     border-radius:15px;
-    border:1px solid rgba(0,234,255,.35);
+
+    border:
+        1px solid
+        rgba(0,234,255,.35);
+
     background:
+
         radial-gradient(
             circle at 90% 10%,
             rgba(0,234,255,.1),
             transparent 40%
         ),
+
         #0b1118;
+
     margin-bottom:18px;
 }
 
 .rate-caption{
+
     color:var(--muted);
+
     font-size:.75rem;
+
     margin-bottom:7px;
 }
 
 .rate-big{
+
     font-size:1.7rem;
+
     font-weight:900;
+
     color:var(--cyan);
 }
 
 .rate-source{
+
     margin-top:7px;
+
     color:#728092;
+
     font-size:.75rem;
 }
 
 .rates-title{
+
     margin:21px 0 10px;
+
     font-size:.9rem;
+
     font-weight:850;
 }
 
 .rates-grid{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:8px;
 }
 
 .rate-item{
+
     padding:12px;
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+        rgba(255,255,255,.025);
+
     border-radius:10px;
 }
 
 .rate-name{
+
     color:var(--muted);
+
     font-size:.72rem;
+
     margin-bottom:4px;
 }
 
 .rate-number{
+
     font-weight:850;
+
     font-size:.94rem;
 }
 
 @media(max-width:500px){
+
     .rates-grid{
         grid-template-columns:1fr;
     }
+
 }
 
-/* ================= INFO ================= */
+
+/* =========================================================
+   INFO
+========================================================= */
 
 .info{
+
     margin-top:18px;
+
     padding:13px 14px;
-    border-left:3px solid var(--cyan);
+
+    border-left:
+        3px solid
+        var(--cyan);
+
     border-radius:9px;
-    background:rgba(0,234,255,.035);
+
+    background:
+        rgba(0,234,255,.035);
+
     color:var(--muted);
+
     font-size:.77rem;
+
     line-height:1.55;
 }
 
-/* ================= RESULTS ================= */
+
+/* =========================================================
+   RESULTS
+========================================================= */
 
 .results{
+
     margin-top:22px;
+
     display:none;
 }
 
@@ -501,10 +748,17 @@ input::placeholder{
 }
 
 .total{
+
     padding:30px 20px;
+
     text-align:center;
-    border-bottom:1px solid var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
     background:
+
         radial-gradient(
             circle at 50% 0,
             rgba(0,234,255,.1),
@@ -513,20 +767,34 @@ input::placeholder{
 }
 
 .total-label{
+
     color:var(--muted);
+
     text-transform:uppercase;
+
     letter-spacing:1.3px;
+
     font-size:.72rem;
+
     font-weight:750;
 }
 
 .total-value{
+
     margin-top:10px;
+
     color:var(--cyan);
-    font-size:clamp(2.3rem,6vw,4rem);
+
+    font-size:
+        clamp(2.3rem,6vw,4rem);
+
     font-weight:950;
+
     letter-spacing:-2px;
-    text-shadow:0 0 30px rgba(0,234,255,.22);
+
+    text-shadow:
+        0 0 30px
+        rgba(0,234,255,.22);
 }
 
 .results-body{
@@ -534,89 +802,146 @@ input::placeholder{
 }
 
 .details{
+
     display:grid;
+
     gap:0;
 }
 
 .detail{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     gap:20px;
+
     padding:14px 0;
-    border-bottom:1px solid var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
 }
 
 .detail-name{
+
     color:var(--muted);
+
     font-size:.85rem;
 }
 
 .detail-value{
+
     font-size:.9rem;
+
     font-weight:850;
+
     text-align:right;
 }
 
 .section{
+
     margin:25px 0 8px;
+
     color:var(--cyan);
+
     font-size:.9rem;
+
     font-weight:900;
+
     text-transform:uppercase;
+
     letter-spacing:1px;
 }
 
 .error-box{
+
     margin:20px 24px 0;
+
     padding:13px 15px;
+
     border-radius:10px;
+
     color:var(--red);
-    background:rgba(255,82,99,.07);
-    border:1px solid rgba(255,82,99,.2);
+
+    background:
+        rgba(255,82,99,.07);
+
+    border:
+        1px solid
+        rgba(255,82,99,.2);
+
     font-size:.85rem;
+
+    line-height:1.5;
 }
 
-/* ================= FOOTER ================= */
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .footer{
+
     text-align:center;
+
     color:#526070;
+
     font-size:.72rem;
+
     margin:28px 0 10px;
 }
 
-/* ================= LOADING ================= */
 
-.loading{
-    animation:pulse 1.3s infinite;
-}
+/* =========================================================
+   LOADING
+========================================================= */
 
 @keyframes pulse{
+
     50%{
         opacity:.45;
     }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
+
 
 <header class="header">
 
     <div class="logo">
+
         <span class="logo-dot"></span>
+
         CALCCARDASH.RU
+
     </div>
 
+
     <h1>
-        Расчёт <span>растаможки</span>
+
+        Расчёт
+        <span>растаможки</span>
+
     </h1>
 
+
     <p class="subtitle">
-        Калькулятор стоимости автомобиля с актуальными курсами Telegram
+
+        Калькулятор стоимости автомобиля
+        с актуальными курсами Telegram
+
     </p>
 
 </header>
@@ -624,15 +949,18 @@ input::placeholder{
 
 <div class="main-grid">
 
+
 <!-- =====================================================
      АВТОМОБИЛЬ
 ===================================================== -->
 
 <section class="card">
 
+
     <div class="card-header">
 
         <div>
+
             <div class="card-title">
                 Параметры автомобиля
             </div>
@@ -640,7 +968,9 @@ input::placeholder{
             <div class="card-subtitle">
                 Данные для расчёта таможенных платежей
             </div>
+
         </div>
+
 
         <span class="status success">
             2026
@@ -651,11 +981,13 @@ input::placeholder{
 
     <div class="card-body">
 
+
         <div class="form-group">
 
             <label>
                 Страна / способ оплаты
             </label>
+
 
             <select id="priceCurrency">
 
@@ -760,6 +1092,7 @@ input::placeholder{
 
         <div class="row">
 
+
             <div class="form-group">
 
                 <label>
@@ -797,6 +1130,7 @@ input::placeholder{
 
 
         <div class="row">
+
 
             <div class="form-group">
 
@@ -885,10 +1219,14 @@ input::placeholder{
         <button
             class="calculate"
             id="calculateBtn"
+            type="button"
             onclick="calculate()"
         >
+
             Рассчитать стоимость
+
         </button>
+
 
     </div>
 
@@ -901,9 +1239,11 @@ input::placeholder{
 
 <section class="card">
 
+
     <div class="card-header">
 
         <div>
+
             <div class="card-title">
                 Курсы и расходы
             </div>
@@ -911,7 +1251,9 @@ input::placeholder{
             <div class="card-subtitle">
                 Курсы получаются с Telegram-сервера
             </div>
+
         </div>
+
 
         <span
             id="rateStatus"
@@ -928,54 +1270,77 @@ input::placeholder{
 
         <div class="telegram">
 
+
             <div class="telegram-top">
 
+
                 <div>
+
                     <div class="telegram-title">
                         📱 Telegram
                     </div>
+
 
                     <div
                         id="telegramStatus"
                         class="telegram-description"
                     >
+
                         Подключение к серверу...
+
                     </div>
+
                 </div>
 
 
                 <button
                     class="telegram-button"
                     id="telegramButton"
+                    type="button"
                     onclick="loadTelegramRates()"
                 >
+
                     Обновить
+
                 </button>
 
+
             </div>
+
 
         </div>
 
 
         <div class="current-rate">
 
+
             <div class="rate-caption">
-                Текущий курс — RUB за 1 единицу валюты
+
+                Текущий курс — RUB
+                за 1 единицу валюты
+
             </div>
+
 
             <div
                 id="carRate"
                 class="rate-big"
             >
+
                 —
+
             </div>
+
 
             <div
                 id="rateSource"
                 class="rate-source"
             >
+
                 Источник: —
+
             </div>
+
 
         </div>
 
@@ -987,134 +1352,166 @@ input::placeholder{
 
         <div class="rates-grid">
 
+
             <div class="rate-item">
+
                 <div class="rate-name">
                     USD SWIFT
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateUSD"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     USD IDUBID
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateUSDID"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     JPY SWIFT
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateJPYSWIFT"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     JPY Internal
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateJPY"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     JPY AFA Cash
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateJPYCASH"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     JPY AFA QR
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateJPYQR"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     KRW
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateKRW"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     AED
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateAED"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     CNY
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateCNY"
                 >
                     —
                 </div>
+
             </div>
 
 
             <div class="rate-item">
+
                 <div class="rate-name">
                     THB
                 </div>
+
                 <div
                     class="rate-number"
                     id="rateTHB"
                 >
                     —
                 </div>
+
             </div>
+
 
         </div>
 
@@ -1136,8 +1533,10 @@ input::placeholder{
             >
 
             <div class="telegram-description">
-                Если поле заполнено, для USD используется
-                указанный курс.
+
+                Если поле заполнено,
+                для USD используется указанный курс.
+
             </div>
 
         </div>
@@ -1149,7 +1548,9 @@ input::placeholder{
                 Комиссия компании
             </label>
 
+
             <div class="input-with-select">
+
 
                 <input
                     id="commission"
@@ -1158,17 +1559,39 @@ input::placeholder{
                     min="0"
                 >
 
+
                 <select id="commissionCurrency">
 
-                    <option value="RUB">RUB</option>
-                    <option value="USD_SWIFT">USD</option>
-                    <option value="JPY_INTERNAL">JPY</option>
-                    <option value="CNY">CNY</option>
-                    <option value="KRW">KRW</option>
-                    <option value="AED">AED</option>
-                    <option value="THB">THB</option>
+                    <option value="RUB">
+                        RUB
+                    </option>
+
+                    <option value="USD_SWIFT">
+                        USD
+                    </option>
+
+                    <option value="JPY_INTERNAL">
+                        JPY
+                    </option>
+
+                    <option value="CNY">
+                        CNY
+                    </option>
+
+                    <option value="KRW">
+                        KRW
+                    </option>
+
+                    <option value="AED">
+                        AED
+                    </option>
+
+                    <option value="THB">
+                        THB
+                    </option>
 
                 </select>
+
 
             </div>
 
@@ -1181,7 +1604,9 @@ input::placeholder{
                 Фрахт
             </label>
 
+
             <div class="input-with-select">
+
 
                 <input
                     id="freight"
@@ -1190,17 +1615,39 @@ input::placeholder{
                     min="0"
                 >
 
+
                 <select id="freightCurrency">
 
-                    <option value="USD_SWIFT">USD</option>
-                    <option value="RUB">RUB</option>
-                    <option value="JPY_INTERNAL">JPY</option>
-                    <option value="CNY">CNY</option>
-                    <option value="KRW">KRW</option>
-                    <option value="AED">AED</option>
-                    <option value="THB">THB</option>
+                    <option value="USD_SWIFT">
+                        USD
+                    </option>
+
+                    <option value="RUB">
+                        RUB
+                    </option>
+
+                    <option value="JPY_INTERNAL">
+                        JPY
+                    </option>
+
+                    <option value="CNY">
+                        CNY
+                    </option>
+
+                    <option value="KRW">
+                        KRW
+                    </option>
+
+                    <option value="AED">
+                        AED
+                    </option>
+
+                    <option value="THB">
+                        THB
+                    </option>
 
                 </select>
+
 
             </div>
 
@@ -1213,7 +1660,9 @@ input::placeholder{
                 СВХ и брокер
             </label>
 
+
             <div class="input-with-select">
+
 
                 <input
                     id="svh"
@@ -1222,17 +1671,39 @@ input::placeholder{
                     min="0"
                 >
 
+
                 <select id="svhCurrency">
 
-                    <option value="RUB">RUB</option>
-                    <option value="USD_SWIFT">USD</option>
-                    <option value="JPY_INTERNAL">JPY</option>
-                    <option value="CNY">CNY</option>
-                    <option value="KRW">KRW</option>
-                    <option value="AED">AED</option>
-                    <option value="THB">THB</option>
+                    <option value="RUB">
+                        RUB
+                    </option>
+
+                    <option value="USD_SWIFT">
+                        USD
+                    </option>
+
+                    <option value="JPY_INTERNAL">
+                        JPY
+                    </option>
+
+                    <option value="CNY">
+                        CNY
+                    </option>
+
+                    <option value="KRW">
+                        KRW
+                    </option>
+
+                    <option value="AED">
+                        AED
+                    </option>
+
+                    <option value="THB">
+                        THB
+                    </option>
 
                 </select>
+
 
             </div>
 
@@ -1242,20 +1713,33 @@ input::placeholder{
         <div class="info">
 
             <b>Источник курсов:</b>
-            Telegram → твой сервер Render → калькулятор.
+
+            Telegram → Render → API → калькулятор.
 
             <br><br>
 
-            Для JPY сервер может отдавать значение
-            <b>55.30 ₽ / 100 JPY</b>.
-            Калькулятор автоматически переводит его
-            в <b>0.553 ₽ / 1 JPY</b>.
+            JPY сервер отдаёт как стоимость
+            <b>за 100 JPY</b>.
+
+            Например:
+
+            <b>55,90 ₽ / 100 JPY</b>.
+
+            Калькулятор автоматически переводит
+            это в <b>0,559 ₽ / 1 JPY</b>.
+
+            <br><br>
+
+            KRW сервер отдаёт за
+            <b>1000 KRW</b>.
 
         </div>
+
 
     </div>
 
 </section>
+
 
 </div>
 
@@ -1269,6 +1753,7 @@ input::placeholder{
     class="card results"
 >
 
+
     <div id="errorBox"></div>
 
 
@@ -1278,11 +1763,14 @@ input::placeholder{
             Итоговая стоимость
         </div>
 
+
         <div
             id="total"
             class="total-value"
         >
+
             0 ₽
+
         </div>
 
     </div>
@@ -1297,25 +1785,33 @@ input::placeholder{
 
     </div>
 
+
 </section>
 
 
 <footer class="footer">
+
     CalcCardash.ru • Расчёт стоимости автомобиля
+
 </footer>
+
 
 </div>
 
 
 <script>
 
+
 /* =========================================================
    API
 ========================================================= */
 
 /*
-   ВАЖНО:
-   Здесь должен быть именно /api/rates
+   ЭТО ГЛАВНОЕ.
+
+   Сервер реально имеет этот endpoint:
+
+   https://curs-auto.onrender.com/api/rates
 */
 
 const API_URL =
@@ -1328,27 +1824,25 @@ const API_URL =
 
 const FALLBACK_RATES = {
 
-    /*
-       Все значения внутри калькулятора —
-       RUB за 1 единицу валюты.
-    */
+    JPY_INTERNAL:0.5530,
 
-    JPY_INTERNAL: 0.5530,
-    JPY_SWIFT: 0.5530,
-    JPY_CASH: 0.5580,
-    JPY_QR: 0.5580,
+    JPY_SWIFT:0.5530,
 
-    CNY: 13.15,
+    JPY_CASH:0.5580,
 
-    KRW: 0.0636,
+    JPY_QR:0.5580,
 
-    THB: 2.70,
+    CNY:13.15,
 
-    AED: 23.50,
+    KRW:0.0636,
 
-    USD_SWIFT: 87.20,
+    THB:2.70,
 
-    USD_IDUBID: 88.70
+    AED:23.50,
+
+    USD_SWIFT:87.20,
+
+    USD_IDUBID:88.70
 
 };
 
@@ -1358,73 +1852,117 @@ let RATES = {
 };
 
 
+let ratesFromAPI = false;
+
+
 /* =========================================================
-   НОРМАЛИЗАЦИЯ КУРСА
+   NORMALIZE RATE
 ========================================================= */
 
-function normalizeRate(value, currency){
+function normalizeRate(
+    value,
+    currency
+){
 
     const n = Number(value);
 
-    if (!Number.isFinite(n) || n <= 0){
+
+    if(
+        !Number.isFinite(n) ||
+        n <= 0
+    ){
+
         return 0;
+
     }
 
 
     /*
-       JPY:
+       JPY.
 
-       Сервер может отдавать:
+       API:
 
-       55.30 за 100 JPY
+       55.9 = ₽ / 100 JPY
 
-       либо:
+       В калькуляторе:
 
-       0.553 за 1 JPY
-
-       Определяем автоматически.
+       0.559 = ₽ / 1 JPY
     */
 
-    if (
+    if(
         currency.startsWith("JPY")
     ){
 
-        if (n > 10){
+        if(n > 10){
+
             return n / 100;
+
         }
 
         return n;
+
     }
 
 
     /*
-       KRW:
+       KRW.
 
-       Сервер может отдавать:
+       API:
 
-       63.60 за 1000 KRW
+       63.6 = ₽ / 1000 KRW
 
-       либо:
+       В калькуляторе:
 
-       0.0636 за 1 KRW
+       0.0636 = ₽ / 1 KRW
     */
 
-    if (currency === "KRW"){
+    if(currency === "KRW"){
 
-        if (n > 1){
+        if(n > 1){
+
             return n / 1000;
+
         }
 
         return n;
+
     }
 
 
     return n;
+
 }
 
 
 /* =========================================================
-   TELEGRAM / API
+   SAFE NUMBER
+========================================================= */
+
+function validRate(
+    value,
+    fallback
+){
+
+    const n = Number(value);
+
+
+    if(
+        Number.isFinite(n) &&
+        n > 0
+    ){
+
+        return n;
+
+    }
+
+
+    return fallback;
+
+}
+
+
+/* =========================================================
+   LOAD TELEGRAM RATES
 ========================================================= */
 
 async function loadTelegramRates(){
@@ -1434,10 +1972,12 @@ async function loadTelegramRates(){
             "rateStatus"
         );
 
+
     const telegramStatus =
         document.getElementById(
             "telegramStatus"
         );
+
 
     const button =
         document.getElementById(
@@ -1459,32 +1999,82 @@ async function loadTelegramRates(){
 
 
     telegramStatus.textContent =
-        "Получаем актуальные курсы с сервера...";
+        "Получаем актуальные курсы с Render API...";
 
 
     try{
 
+
         /*
-           Добавляем timestamp,
-           чтобы браузер не отдавал старый cache.
+           Таймаут 15 секунд.
+
+           Если Render долго просыпается,
+           сайт не зависает навсегда.
         */
+
+        const controller =
+            new AbortController();
+
+
+        const timeout =
+            setTimeout(
+                () => {
+                    controller.abort();
+                },
+                15000
+            );
+
+
+        /*
+           Timestamp полностью отключает
+           использование старого cache.
+        */
+
+        const url =
+            API_URL +
+            "?t=" +
+            Date.now();
+
+
+        console.log(
+            "Запрос курсов:",
+            url
+        );
+
 
         const response =
             await fetch(
-                API_URL +
-                "?t=" +
-                Date.now(),
+                url,
                 {
                     method:"GET",
+
+                    mode:"cors",
+
                     cache:"no-store",
+
+                    credentials:"omit",
+
                     headers:{
-                        "Accept":"application/json"
-                    }
+                        "Accept":
+                            "application/json"
+                    },
+
+                    signal:
+                        controller.signal
                 }
             );
 
 
-        if (!response.ok){
+        clearTimeout(timeout);
+
+
+        console.log(
+            "HTTP статус API:",
+            response.status
+        );
+
+
+        if(!response.ok){
 
             throw new Error(
                 "HTTP " +
@@ -1494,32 +2084,29 @@ async function loadTelegramRates(){
         }
 
 
-        /*
-           Читаем JSON.
-        */
-
         const data =
             await response.json();
 
 
         console.log(
-            "Ответ API курсов:",
+            "Полный ответ API:",
             data
         );
 
 
         /*
-           Проверяем наличие rates.
+           Проверяем API.
         */
 
-        if (
+        if(
             !data ||
+            data.success !== true ||
             !data.rates ||
             typeof data.rates !== "object"
         ){
 
             throw new Error(
-                "API не вернул объект rates"
+                "API вернул неправильный формат"
             );
 
         }
@@ -1529,19 +2116,41 @@ async function loadTelegramRates(){
             data.rates;
 
 
+        console.log(
+            "Полученные rates:",
+            r
+        );
+
+
         /* =================================================
-           JPY INTERNAL
+           USD
         ================================================= */
 
-        RATES.JPY_INTERNAL =
-            normalizeRate(
-                r.JPY_INTERNAL ??
-                r.JPY ??
-                r.JPY_SWIFT,
-                "JPY_INTERNAL"
-            )
-            ||
-            FALLBACK_RATES.JPY_INTERNAL;
+        RATES.USD_SWIFT =
+            validRate(
+
+                normalizeRate(
+                    r.USD ??
+                    r.USD_SWIFT,
+                    "USD_SWIFT"
+                ),
+
+                FALLBACK_RATES.USD_SWIFT
+
+            );
+
+
+        RATES.USD_IDUBID =
+            validRate(
+
+                normalizeRate(
+                    r.USD_IDUBID,
+                    "USD_IDUBID"
+                ),
+
+                FALLBACK_RATES.USD_IDUBID
+
+            );
 
 
         /* =================================================
@@ -1549,69 +2158,87 @@ async function loadTelegramRates(){
         ================================================= */
 
         RATES.JPY_SWIFT =
-            normalizeRate(
-                r.JPY_SWIFT ??
-                r.JPY,
-                "JPY_SWIFT"
-            )
-            ||
-            FALLBACK_RATES.JPY_SWIFT;
+            validRate(
+
+                normalizeRate(
+                    r.JPY_SWIFT ??
+                    r.JPY,
+                    "JPY_SWIFT"
+                ),
+
+                FALLBACK_RATES.JPY_SWIFT
+
+            );
+
+
+        /* =================================================
+           JPY INTERNAL
+        ================================================= */
+
+        RATES.JPY_INTERNAL =
+            validRate(
+
+                normalizeRate(
+                    r.JPY_INTERNAL ??
+                    r.JPY ??
+                    r.JPY_SWIFT,
+                    "JPY_INTERNAL"
+                ),
+
+                FALLBACK_RATES.JPY_INTERNAL
+
+            );
 
 
         /* =================================================
            JPY AFA CASH
+
+           Серверное имя:
+
+           JPY_AFA_CASH
         ================================================= */
 
-        RATES.JPY_CASH =
+        const afaCash =
             normalizeRate(
                 r.JPY_AFA_CASH ??
                 r.JPY_AFA ??
                 r.JPY_CASH,
                 "JPY_CASH"
-            )
-            ||
-            FALLBACK_RATES.JPY_CASH;
+            );
+
+
+        /*
+           Если сервер реально прислал значение —
+           используем его.
+
+           Если null —
+           используем fallback.
+        */
+
+        RATES.JPY_CASH =
+            validRate(
+                afaCash,
+                FALLBACK_RATES.JPY_CASH
+            );
 
 
         /* =================================================
            JPY AFA QR
         ================================================= */
 
-        RATES.JPY_QR =
+        const afaQR =
             normalizeRate(
                 r.JPY_AFA_QR ??
                 r.JPY_QR,
                 "JPY_QR"
-            )
-            ||
-            FALLBACK_RATES.JPY_QR;
+            );
 
 
-        /* =================================================
-           USD SWIFT
-        ================================================= */
-
-        RATES.USD_SWIFT =
-            normalizeRate(
-                r.USD ??
-                r.USD_SWIFT,
-                "USD_SWIFT"
-            )
-            ||
-            FALLBACK_RATES.USD_SWIFT;
-
-
-        /* =================================================
-           USD IDUBID
-        ================================================= */
-
-        RATES.USD_IDUBID =
-            normalizeRate(
-                r.USD_IDUBID,
-                "USD_IDUBID"
-            )
-            ||
-            FALLBACK_RATES.USD_IDUBID;
+        RATES.JPY_QR =
+            validRate(
+                afaQR,
+                FALLBACK_RATES.JPY_QR
+            );
 
 
         /* =================================================
@@ -1619,12 +2246,16 @@ async function loadTelegramRates(){
         ================================================= */
 
         RATES.CNY =
-            normalizeRate(
-                r.CNY,
-                "CNY"
-            )
-            ||
-            FALLBACK_RATES.CNY;
+            validRate(
+
+                normalizeRate(
+                    r.CNY,
+                    "CNY"
+                ),
+
+                FALLBACK_RATES.CNY
+
+            );
 
 
         /* =================================================
@@ -1632,12 +2263,16 @@ async function loadTelegramRates(){
         ================================================= */
 
         RATES.KRW =
-            normalizeRate(
-                r.KRW,
-                "KRW"
-            )
-            ||
-            FALLBACK_RATES.KRW;
+            validRate(
+
+                normalizeRate(
+                    r.KRW,
+                    "KRW"
+                ),
+
+                FALLBACK_RATES.KRW
+
+            );
 
 
         /* =================================================
@@ -1645,12 +2280,16 @@ async function loadTelegramRates(){
         ================================================= */
 
         RATES.AED =
-            normalizeRate(
-                r.AED,
-                "AED"
-            )
-            ||
-            FALLBACK_RATES.AED;
+            validRate(
+
+                normalizeRate(
+                    r.AED,
+                    "AED"
+                ),
+
+                FALLBACK_RATES.AED
+
+            );
 
 
         /* =================================================
@@ -1658,26 +2297,29 @@ async function loadTelegramRates(){
         ================================================= */
 
         RATES.THB =
-            normalizeRate(
-                r.THB,
-                "THB"
-            )
-            ||
-            FALLBACK_RATES.THB;
+            validRate(
+
+                normalizeRate(
+                    r.THB,
+                    "THB"
+                ),
+
+                FALLBACK_RATES.THB
+
+            );
 
 
-        /*
-           Логируем итоговые курсы.
-        */
+        ratesFromAPI = true;
+
 
         console.log(
-            "Нормализованные курсы:",
+            "ИТОГОВЫЕ КУРСЫ:",
             RATES
         );
 
 
         /* =================================================
-           STATUS
+           STATUS SUCCESS
         ================================================= */
 
         status.textContent =
@@ -1688,20 +2330,15 @@ async function loadTelegramRates(){
 
 
         telegramStatus.innerHTML =
-            "✅ Курсы успешно получены";
+            "✅ Курсы успешно получены с сервера";
 
 
-        /*
-           Сервер использует updatedAt,
-           а не updated_at.
-        */
-
-        if (data.updatedAt){
+        if(data.updatedAt){
 
             telegramStatus.innerHTML +=
                 "<br>Обновлено: " +
                 escapeHtml(
-                    String(
+                    formatDate(
                         data.updatedAt
                     )
                 );
@@ -1709,15 +2346,10 @@ async function loadTelegramRates(){
         }
 
 
-        /*
-           Если есть postId —
-           тоже покажем его в отладочной информации.
-        */
-
-        if (data.postId){
+        if(data.postId){
 
             telegramStatus.innerHTML +=
-                "<br>Post ID: " +
+                "<br>Telegram post: " +
                 escapeHtml(
                     String(
                         data.postId
@@ -1727,6 +2359,10 @@ async function loadTelegramRates(){
         }
 
 
+        /*
+           Обновляем интерфейс.
+        */
+
         updateRatesUI();
 
         updateCarRate();
@@ -1734,27 +2370,50 @@ async function loadTelegramRates(){
 
     }catch(error){
 
+
         console.error(
-            "Ошибка загрузки курсов:",
+            "ОШИБКА API:",
             error
         );
 
 
+        ratesFromAPI = false;
+
+
         status.textContent =
-            "Ошибка API";
+            "Резервные курсы";
 
         status.className =
             "status error";
 
 
+        let message =
+            "Не удалось получить курсы.";
+
+
+        if(
+            error &&
+            error.name === "AbortError"
+        ){
+
+            message =
+                "Сервер Render не ответил за 15 секунд.";
+
+        }else if(
+            error &&
+            error.message
+        ){
+
+            message =
+                error.message;
+
+        }
+
+
         telegramStatus.innerHTML =
-            "⚠️ Не удалось получить курсы." +
-            "<br>Используются резервные курсы." +
-            "<br><small>" +
-            escapeHtml(
-                error.message
-            ) +
-            "</small>";
+            "⚠️ " +
+            escapeHtml(message) +
+            "<br>Используются резервные курсы.";
 
 
         /*
@@ -1773,62 +2432,125 @@ async function loadTelegramRates(){
 
     }finally{
 
+
         button.disabled = false;
 
         button.textContent =
             "Обновить";
 
     }
+
 }
 
 
 /* =========================================================
-   UI RATES
+   FORMAT DATE
 ========================================================= */
 
-function moneyRate(value){
+function formatDate(
+    value
+){
+
+    const date =
+        new Date(value);
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleString(
+        "ru-RU"
+    );
+
+}
+
+
+/* =========================================================
+   MONEY RATE
+========================================================= */
+
+function moneyRate(
+    value
+){
 
     return (
+
         Number(value) || 0
+
     ).toLocaleString(
         "ru-RU",
         {
             minimumFractionDigits:4,
             maximumFractionDigits:4
         }
+
     ) + " ₽";
+
 }
 
 
-function rateJPY100(value){
+/* =========================================================
+   JPY / 100
+========================================================= */
+
+function rateJPY100(
+    value
+){
 
     return (
+
         (Number(value) || 0) * 100
+
     ).toLocaleString(
         "ru-RU",
         {
             minimumFractionDigits:2,
             maximumFractionDigits:2
         }
+
     ) + " ₽ / 100";
+
 }
 
 
-function rateKRW1000(value){
+/* =========================================================
+   KRW / 1000
+========================================================= */
+
+function rateKRW1000(
+    value
+){
 
     return (
+
         (Number(value) || 0) * 1000
+
     ).toLocaleString(
         "ru-RU",
         {
             minimumFractionDigits:2,
             maximumFractionDigits:2
         }
+
     ) + " ₽ / 1000";
+
 }
 
+
+/* =========================================================
+   UPDATE RATES UI
+========================================================= */
 
 function updateRatesUI(){
+
 
     document.getElementById(
         "rateUSD"
@@ -1908,6 +2630,7 @@ function updateRatesUI(){
         moneyRate(
             RATES.THB
         );
+
 }
 
 
@@ -1915,20 +2638,19 @@ function updateRatesUI(){
    GET RATE
 ========================================================= */
 
-function getRate(currency){
-
-    /*
-       RUB всегда равен 1.
-    */
+function getRate(
+    currency
+){
 
     if(currency === "RUB"){
+
         return 1;
+
     }
 
 
     /*
-       Для USD SWIFT можно использовать
-       ручной курс.
+       Ручной USD имеет приоритет.
     */
 
     if(
@@ -1960,14 +2682,16 @@ function getRate(currency){
             RATES[currency]
         ) || 0
     );
+
 }
 
 
 /* =========================================================
-   CURRENT CAR RATE
+   UPDATE CURRENT CAR RATE
 ========================================================= */
 
 function updateCarRate(){
+
 
     const currency =
         document.getElementById(
@@ -1985,14 +2709,18 @@ function updateCarRate(){
         );
 
 
+    const source =
+        document.getElementById(
+            "rateSource"
+        );
+
+
     if(!rate){
 
         carRate.textContent =
             "—";
 
-        document.getElementById(
-            "rateSource"
-        ).textContent =
+        source.textContent =
             "Источник: курс отсутствует";
 
         return;
@@ -2000,12 +2728,16 @@ function updateCarRate(){
     }
 
 
-    if(currency.startsWith("JPY")){
+    if(
+        currency.startsWith("JPY")
+    ){
 
         carRate.textContent =
             rateJPY100(rate);
 
-    }else if(currency === "KRW"){
+    }else if(
+        currency === "KRW"
+    ){
 
         carRate.textContent =
             rateKRW1000(rate);
@@ -2018,8 +2750,10 @@ function updateCarRate(){
     }
 
 
-    let source =
-        "Telegram";
+    let sourceText =
+        ratesFromAPI
+            ? "Telegram / API"
+            : "Резерв";
 
 
     if(
@@ -2031,24 +2765,23 @@ function updateCarRate(){
         ) > 0
     ){
 
-        source =
+        sourceText =
             "Вручную";
 
     }
 
 
-    document.getElementById(
-        "rateSource"
-    ).textContent =
+    source.textContent =
         "Источник: " +
-        source +
+        sourceText +
         " • " +
         currency;
+
 }
 
 
 /* =========================================================
-   EVENT LISTENERS
+   EVENTS
 ========================================================= */
 
 document
@@ -2075,7 +2808,9 @@ document
    CUSTOMS FEE
 ========================================================= */
 
-function getCustomsFee(priceRub){
+function getCustomsFee(
+    priceRub
+){
 
     if(priceRub <= 200000)
         return 1231;
@@ -2099,6 +2834,7 @@ function getCustomsFee(priceRub){
         return 49240;
 
     return 73860;
+
 }
 
 
@@ -2153,6 +2889,7 @@ function dutyPhysUnder3(
         priceEUR * percent,
         volume * minPerCm
     );
+
 }
 
 
@@ -2217,6 +2954,7 @@ function dutyPhysOlder(
 
 
     return volume * rate;
+
 }
 
 
@@ -2238,6 +2976,7 @@ function dutyLegalPetrol(
                 : .15;
 
         return priceEUR * percent;
+
     }
 
 
@@ -2275,6 +3014,7 @@ function dutyLegalPetrol(
             priceEUR * .20,
             volume * min
         );
+
     }
 
 
@@ -2301,6 +3041,7 @@ function dutyLegalPetrol(
 
 
     return volume * rate;
+
 }
 
 
@@ -2315,7 +3056,9 @@ function dutyLegalDiesel(
 ){
 
     if(age === "less_3"){
+
         return priceEUR * .15;
+
     }
 
 
@@ -2341,6 +3084,7 @@ function dutyLegalDiesel(
             priceEUR * .20,
             volume * min
         );
+
     }
 
 
@@ -2358,6 +3102,7 @@ function dutyLegalDiesel(
 
 
     return volume * rate;
+
 }
 
 
@@ -2373,18 +3118,13 @@ function getCustomsDuty({
     priceEUR
 }){
 
-    /*
-       EV
-    */
 
     if(engine === "ev"){
+
         return priceEUR * .15;
+
     }
 
-
-    /*
-       Физлицо
-    */
 
     if(owner === "phys"){
 
@@ -2406,10 +3146,6 @@ function getCustomsDuty({
     }
 
 
-    /*
-       Юрлицо
-    */
-
     if(engine === "diesel"){
 
         return dutyLegalDiesel(
@@ -2426,6 +3162,7 @@ function getCustomsDuty({
         volume,
         priceEUR
     );
+
 }
 
 
@@ -2439,11 +3176,25 @@ function getExcise(
     engine
 ){
 
-    if(
-        owner !== "legal" &&
-        engine !== "ev"
-    ){
+    /*
+       Акциз только для юридических лиц.
+    */
+
+    if(owner !== "legal"){
+
         return 0;
+
+    }
+
+
+    /*
+       Для электромобиля ДВС-акциз не применяем.
+    */
+
+    if(engine === "ev"){
+
+        return 0;
+
     }
 
 
@@ -2466,6 +3217,7 @@ function getExcise(
         return power * 1771;
 
     return power * 1829;
+
 }
 
 
@@ -2481,7 +3233,9 @@ function getVAT(
 ){
 
     if(owner !== "legal"){
+
         return 0;
+
     }
 
 
@@ -2490,6 +3244,7 @@ function getVAT(
         dutyRub +
         excise
     ) * .20;
+
 }
 
 
@@ -2498,12 +3253,15 @@ function getVAT(
 ========================================================= */
 
 function getUtilizationFee({
+
     owner,
     age,
     engine,
     power,
     volume
+
 }){
+
 
     const base =
         owner === "legal"
@@ -2513,13 +3271,16 @@ function getUtilizationFee({
 
     if(owner === "phys"){
 
-        let loyalty = false;
+        let loyalty =
+            false;
 
 
         if(engine === "ev"){
 
             if(power <= 80){
+
                 loyalty = true;
+
             }
 
         }else{
@@ -2528,7 +3289,9 @@ function getUtilizationFee({
                 volume <= 3000 &&
                 power <= 160
             ){
+
                 loyalty = true;
+
             }
 
         }
@@ -2544,6 +3307,7 @@ function getUtilizationFee({
 
 
             return base * coefficient;
+
         }
 
     }
@@ -2607,10 +3371,12 @@ function getUtilizationFee({
             age === "3_5"
                 ? 54.90
                 : 96.08;
+
     }
 
 
     return base * coefficient;
+
 }
 
 
@@ -2637,10 +3403,12 @@ function getExpense(
         ).value;
 
 
-    return (
-        amount *
-        getRate(currency)
-    );
+    const rate =
+        getRate(currency);
+
+
+    return amount * rate;
+
 }
 
 
@@ -2649,6 +3417,7 @@ function getExpense(
 ========================================================= */
 
 function calculate(){
+
 
     const price =
         Number(
@@ -2728,7 +3497,9 @@ function calculate(){
         "";
 
 
-    /* ================= VALIDATION ================= */
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
 
     if(price <= 0){
 
@@ -2740,6 +3511,7 @@ function calculate(){
         );
 
         return;
+
     }
 
 
@@ -2756,6 +3528,7 @@ function calculate(){
         );
 
         return;
+
     }
 
 
@@ -2772,6 +3545,7 @@ function calculate(){
         );
 
         return;
+
     }
 
 
@@ -2789,10 +3563,13 @@ function calculate(){
         );
 
         return;
+
     }
 
 
-    /* ================= PRICE ================= */
+    /* =====================================================
+       PRICE
+    ===================================================== */
 
     const priceRub =
         price * carRate;
@@ -2802,15 +3579,19 @@ function calculate(){
         priceRub / eurRate;
 
 
-    /* ================= DUTY ================= */
+    /* =====================================================
+       DUTY
+    ===================================================== */
 
     const dutyEUR =
         getCustomsDuty({
+
             owner,
             age,
             engine,
             volume,
             priceEUR
+
         });
 
 
@@ -2818,7 +3599,9 @@ function calculate(){
         dutyEUR * eurRate;
 
 
-    /* ================= CUSTOMS FEE ================= */
+    /* =====================================================
+       CUSTOMS FEE
+    ===================================================== */
 
     const customsFee =
         getCustomsFee(
@@ -2826,7 +3609,9 @@ function calculate(){
         );
 
 
-    /* ================= EXCISE ================= */
+    /* =====================================================
+       EXCISE
+    ===================================================== */
 
     const excise =
         getExcise(
@@ -2836,7 +3621,9 @@ function calculate(){
         );
 
 
-    /* ================= VAT ================= */
+    /* =====================================================
+       VAT
+    ===================================================== */
 
     const vat =
         getVAT(
@@ -2847,27 +3634,32 @@ function calculate(){
         );
 
 
-    /* ================= UTILIZATION ================= */
+    /* =====================================================
+       UTILIZATION
+    ===================================================== */
 
     let utilization =
         getUtilizationFee({
+
             owner,
             age,
             engine,
             power,
             volume
+
         });
 
 
     if(classic){
 
-        utilization =
-            0;
+        utilization = 0;
 
     }
 
 
-    /* ================= EXPENSES ================= */
+    /* =====================================================
+       EXPENSES
+    ===================================================== */
 
     const commission =
         getExpense(
@@ -2890,7 +3682,9 @@ function calculate(){
         );
 
 
-    /* ================= TOTAL ================= */
+    /* =====================================================
+       TOTAL
+    ===================================================== */
 
     const customsTotal =
         customsFee +
@@ -2908,7 +3702,9 @@ function calculate(){
         svh;
 
 
-    /* ================= OUTPUT ================= */
+    /* =====================================================
+       OUTPUT
+    ===================================================== */
 
     document.getElementById(
         "total"
@@ -3021,9 +3817,13 @@ function calculate(){
 
 
     results.scrollIntoView({
+
         behavior:"smooth",
+
         block:"start"
+
     });
+
 }
 
 
@@ -3034,7 +3834,7 @@ function calculate(){
 function addDetail(
     name,
     value,
-    euro=false
+    euro = false
 ){
 
     const details =
@@ -3056,8 +3856,11 @@ function addDetail(
     div.innerHTML = `
 
         <span class="detail-name">
+
             ${escapeHtml(name)}
+
         </span>
+
 
         <span class="detail-value">
 
@@ -3075,36 +3878,57 @@ function addDetail(
     details.appendChild(
         div
     );
+
 }
 
 
 /* =========================================================
-   FORMAT
+   RUB
 ========================================================= */
 
-function rub(value){
+function rub(
+    value
+){
 
     return (
+
         Number(value) || 0
+
     ).toLocaleString(
+
         "ru-RU",
+
         {
             maximumFractionDigits:0
         }
+
     ) + " ₽";
+
 }
 
 
-function number(value){
+/* =========================================================
+   NUMBER
+========================================================= */
+
+function number(
+    value
+){
 
     return (
+
         Number(value) || 0
+
     ).toLocaleString(
+
         "ru-RU",
+
         {
             maximumFractionDigits:2
         }
+
     );
+
 }
 
 
@@ -3112,29 +3936,37 @@ function number(value){
    ESCAPE HTML
 ========================================================= */
 
-function escapeHtml(value){
+function escapeHtml(
+    value
+){
 
     return String(value)
+
         .replaceAll(
             "&",
             "&amp;"
         )
+
         .replaceAll(
             "<",
             "&lt;"
         )
+
         .replaceAll(
             ">",
             "&gt;"
         )
+
         .replaceAll(
             '"',
             "&quot;"
         )
+
         .replaceAll(
             "'",
             "&#039;"
         );
+
 }
 
 
@@ -3144,35 +3976,44 @@ function escapeHtml(value){
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
+
 
         /*
-           Сначала показываем fallback,
-           затем сразу пытаемся получить
-           свежие курсы с API.
+           Сначала показываем резервные значения.
         */
 
         updateRatesUI();
 
         updateCarRate();
 
-        loadTelegramRates();
+
+        /*
+           СРАЗУ запрашиваем настоящий API.
+        */
+
+        await loadTelegramRates();
 
 
         /*
-           Автоматическое обновление
-           каждые 10 минут.
+           Далее обновляем каждые 10 минут.
         */
 
         setInterval(
+
             loadTelegramRates,
+
             10 * 60 * 1000
+
         );
 
     }
 );
 
+
 </script>
 
+
 </body>
+
 </html>

@@ -909,7 +909,7 @@ input::placeholder{
             </div>
 
             <div class="card-subtitle">
-                Курсы получаются с твоего Telegram-сервера
+                Курсы получаются с Telegram-сервера
             </div>
         </div>
 
@@ -1119,7 +1119,10 @@ input::placeholder{
         </div>
 
 
-        <div class="form-group" style="margin-top:20px">
+        <div
+            class="form-group"
+            style="margin-top:20px"
+        >
 
             <label>
                 Ручной курс USD
@@ -1132,9 +1135,7 @@ input::placeholder{
                 placeholder="Если пусто — Telegram"
             >
 
-            <div
-                class="telegram-description"
-            >
+            <div class="telegram-description">
                 Если поле заполнено, для USD используется
                 указанный курс.
             </div>
@@ -1312,8 +1313,13 @@ input::placeholder{
    API
 ========================================================= */
 
+/*
+   ВАЖНО:
+   Здесь должен быть именно /api/rates
+*/
+
 const API_URL =
-    "https://curs-auto.onrender.com";
+    "https://curs-auto.onrender.com/api/rates";
 
 
 /* =========================================================
@@ -1364,12 +1370,16 @@ function normalizeRate(value, currency){
         return 0;
     }
 
+
     /*
        JPY:
-       сервер может отдавать:
+
+       Сервер может отдавать:
+
        55.30 за 100 JPY
 
        либо:
+
        0.553 за 1 JPY
 
        Определяем автоматически.
@@ -1389,10 +1399,13 @@ function normalizeRate(value, currency){
 
     /*
        KRW:
-       например:
+
+       Сервер может отдавать:
+
        63.60 за 1000 KRW
 
-       или:
+       либо:
+
        0.0636 за 1 KRW
     */
 
@@ -1411,26 +1424,35 @@ function normalizeRate(value, currency){
 
 
 /* =========================================================
-   TELEGRAM
+   TELEGRAM / API
 ========================================================= */
 
 async function loadTelegramRates(){
 
     const status =
-        document.getElementById("rateStatus");
+        document.getElementById(
+            "rateStatus"
+        );
 
     const telegramStatus =
-        document.getElementById("telegramStatus");
+        document.getElementById(
+            "telegramStatus"
+        );
 
     const button =
-        document.getElementById("telegramButton");
+        document.getElementById(
+            "telegramButton"
+        );
 
 
     button.disabled = true;
 
-    button.textContent = "Загрузка...";
+    button.textContent =
+        "Загрузка...";
 
-    status.textContent = "Загрузка";
+
+    status.textContent =
+        "Загрузка";
 
     status.className =
         "status loading";
@@ -1442,12 +1464,22 @@ async function loadTelegramRates(){
 
     try{
 
+        /*
+           Добавляем timestamp,
+           чтобы браузер не отдавал старый cache.
+        */
+
         const response =
             await fetch(
-                API_URL + "?t=" + Date.now(),
+                API_URL +
+                "?t=" +
+                Date.now(),
                 {
                     method:"GET",
-                    cache:"no-store"
+                    cache:"no-store",
+                    headers:{
+                        "Accept":"application/json"
+                    }
                 }
             );
 
@@ -1455,29 +1487,39 @@ async function loadTelegramRates(){
         if (!response.ok){
 
             throw new Error(
-                "HTTP " + response.status
+                "HTTP " +
+                response.status
             );
 
         }
 
+
+        /*
+           Читаем JSON.
+        */
 
         const data =
             await response.json();
 
 
         console.log(
-            "Ответ сервера:",
+            "Ответ API курсов:",
             data
         );
 
 
+        /*
+           Проверяем наличие rates.
+        */
+
         if (
             !data ||
-            !data.rates
+            !data.rates ||
+            typeof data.rates !== "object"
         ){
 
             throw new Error(
-                "API не вернул rates"
+                "API не вернул объект rates"
             );
 
         }
@@ -1487,9 +1529,9 @@ async function loadTelegramRates(){
             data.rates;
 
 
-        /*
-           JPY
-        */
+        /* =================================================
+           JPY INTERNAL
+        ================================================= */
 
         RATES.JPY_INTERNAL =
             normalizeRate(
@@ -1498,8 +1540,13 @@ async function loadTelegramRates(){
                 r.JPY_SWIFT,
                 "JPY_INTERNAL"
             )
-            || FALLBACK_RATES.JPY_INTERNAL;
+            ||
+            FALLBACK_RATES.JPY_INTERNAL;
 
+
+        /* =================================================
+           JPY SWIFT
+        ================================================= */
 
         RATES.JPY_SWIFT =
             normalizeRate(
@@ -1507,31 +1554,42 @@ async function loadTelegramRates(){
                 r.JPY,
                 "JPY_SWIFT"
             )
-            || FALLBACK_RATES.JPY_SWIFT;
+            ||
+            FALLBACK_RATES.JPY_SWIFT;
 
+
+        /* =================================================
+           JPY AFA CASH
+        ================================================= */
 
         RATES.JPY_CASH =
             normalizeRate(
+                r.JPY_AFA_CASH ??
                 r.JPY_AFA ??
-                r.JPY_CASH ??
-                r.JPY_AFA_CASH,
+                r.JPY_CASH,
                 "JPY_CASH"
             )
-            || FALLBACK_RATES.JPY_CASH;
+            ||
+            FALLBACK_RATES.JPY_CASH;
 
+
+        /* =================================================
+           JPY AFA QR
+        ================================================= */
 
         RATES.JPY_QR =
             normalizeRate(
-                r.JPY_QR ??
-                r.JPY_AFA_QR,
+                r.JPY_AFA_QR ??
+                r.JPY_QR,
                 "JPY_QR"
             )
-            || FALLBACK_RATES.JPY_QR;
+            ||
+            FALLBACK_RATES.JPY_QR;
 
 
-        /*
-           USD
-        */
+        /* =================================================
+           USD SWIFT
+        ================================================= */
 
         RATES.USD_SWIFT =
             normalizeRate(
@@ -1539,56 +1597,88 @@ async function loadTelegramRates(){
                 r.USD_SWIFT,
                 "USD_SWIFT"
             )
-            || FALLBACK_RATES.USD_SWIFT;
+            ||
+            FALLBACK_RATES.USD_SWIFT;
 
+
+        /* =================================================
+           USD IDUBID
+        ================================================= */
 
         RATES.USD_IDUBID =
             normalizeRate(
                 r.USD_IDUBID,
                 "USD_IDUBID"
             )
-            || FALLBACK_RATES.USD_IDUBID;
+            ||
+            FALLBACK_RATES.USD_IDUBID;
 
 
-        /*
-           Остальные
-        */
+        /* =================================================
+           CNY
+        ================================================= */
 
         RATES.CNY =
             normalizeRate(
                 r.CNY,
                 "CNY"
             )
-            || FALLBACK_RATES.CNY;
+            ||
+            FALLBACK_RATES.CNY;
 
+
+        /* =================================================
+           KRW
+        ================================================= */
 
         RATES.KRW =
             normalizeRate(
                 r.KRW,
                 "KRW"
             )
-            || FALLBACK_RATES.KRW;
+            ||
+            FALLBACK_RATES.KRW;
 
+
+        /* =================================================
+           AED
+        ================================================= */
 
         RATES.AED =
             normalizeRate(
                 r.AED,
                 "AED"
             )
-            || FALLBACK_RATES.AED;
+            ||
+            FALLBACK_RATES.AED;
 
+
+        /* =================================================
+           THB
+        ================================================= */
 
         RATES.THB =
             normalizeRate(
                 r.THB,
                 "THB"
             )
-            || FALLBACK_RATES.THB;
+            ||
+            FALLBACK_RATES.THB;
 
 
         /*
-           Статус
+           Логируем итоговые курсы.
         */
+
+        console.log(
+            "Нормализованные курсы:",
+            RATES
+        );
+
+
+        /* =================================================
+           STATUS
+        ================================================= */
 
         status.textContent =
             "Telegram ✓";
@@ -1600,12 +1690,38 @@ async function loadTelegramRates(){
         telegramStatus.innerHTML =
             "✅ Курсы успешно получены";
 
-        if (data.updated_at){
+
+        /*
+           Сервер использует updatedAt,
+           а не updated_at.
+        */
+
+        if (data.updatedAt){
 
             telegramStatus.innerHTML +=
                 "<br>Обновлено: " +
                 escapeHtml(
-                    String(data.updated_at)
+                    String(
+                        data.updatedAt
+                    )
+                );
+
+        }
+
+
+        /*
+           Если есть postId —
+           тоже покажем его в отладочной информации.
+        */
+
+        if (data.postId){
+
+            telegramStatus.innerHTML +=
+                "<br>Post ID: " +
+                escapeHtml(
+                    String(
+                        data.postId
+                    )
                 );
 
         }
@@ -1625,16 +1741,25 @@ async function loadTelegramRates(){
 
 
         status.textContent =
-            "Резервные курсы";
+            "Ошибка API";
 
         status.className =
             "status error";
 
 
         telegramStatus.innerHTML =
-            "⚠️ Telegram/API временно недоступен." +
-            "<br>Используются последние резервные курсы.";
+            "⚠️ Не удалось получить курсы." +
+            "<br>Используются резервные курсы." +
+            "<br><small>" +
+            escapeHtml(
+                error.message
+            ) +
+            "</small>";
 
+
+        /*
+           Возвращаем fallback.
+        */
 
         RATES = {
             ...FALLBACK_RATES
@@ -1644,6 +1769,7 @@ async function loadTelegramRates(){
         updateRatesUI();
 
         updateCarRate();
+
 
     }finally{
 
@@ -1707,74 +1833,103 @@ function updateRatesUI(){
     document.getElementById(
         "rateUSD"
     ).textContent =
-        moneyRate(RATES.USD_SWIFT);
+        moneyRate(
+            RATES.USD_SWIFT
+        );
 
 
     document.getElementById(
         "rateUSDID"
     ).textContent =
-        moneyRate(RATES.USD_IDUBID);
+        moneyRate(
+            RATES.USD_IDUBID
+        );
 
 
     document.getElementById(
         "rateJPYSWIFT"
     ).textContent =
-        rateJPY100(RATES.JPY_SWIFT);
+        rateJPY100(
+            RATES.JPY_SWIFT
+        );
 
 
     document.getElementById(
         "rateJPY"
     ).textContent =
-        rateJPY100(RATES.JPY_INTERNAL);
+        rateJPY100(
+            RATES.JPY_INTERNAL
+        );
 
 
     document.getElementById(
         "rateJPYCASH"
     ).textContent =
-        rateJPY100(RATES.JPY_CASH);
+        rateJPY100(
+            RATES.JPY_CASH
+        );
 
 
     document.getElementById(
         "rateJPYQR"
     ).textContent =
-        rateJPY100(RATES.JPY_QR);
+        rateJPY100(
+            RATES.JPY_QR
+        );
 
 
     document.getElementById(
         "rateKRW"
     ).textContent =
-        rateKRW1000(RATES.KRW);
+        rateKRW1000(
+            RATES.KRW
+        );
 
 
     document.getElementById(
         "rateAED"
     ).textContent =
-        moneyRate(RATES.AED);
+        moneyRate(
+            RATES.AED
+        );
 
 
     document.getElementById(
         "rateCNY"
     ).textContent =
-        moneyRate(RATES.CNY);
+        moneyRate(
+            RATES.CNY
+        );
 
 
     document.getElementById(
         "rateTHB"
     ).textContent =
-        moneyRate(RATES.THB);
+        moneyRate(
+            RATES.THB
+        );
 }
 
 
 /* =========================================================
-   RATE
+   GET RATE
 ========================================================= */
 
 function getRate(currency){
+
+    /*
+       RUB всегда равен 1.
+    */
 
     if(currency === "RUB"){
         return 1;
     }
 
+
+    /*
+       Для USD SWIFT можно использовать
+       ручной курс.
+    */
 
     if(
         currency === "USD_SWIFT"
@@ -1808,6 +1963,10 @@ function getRate(currency){
 }
 
 
+/* =========================================================
+   CURRENT CAR RATE
+========================================================= */
+
 function updateCarRate(){
 
     const currency =
@@ -1830,6 +1989,11 @@ function updateCarRate(){
 
         carRate.textContent =
             "—";
+
+        document.getElementById(
+            "rateSource"
+        ).textContent =
+            "Источник: курс отсутствует";
 
         return;
 
@@ -1883,8 +2047,14 @@ function updateCarRate(){
 }
 
 
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+
 document
-    .getElementById("priceCurrency")
+    .getElementById(
+        "priceCurrency"
+    )
     .addEventListener(
         "change",
         updateCarRate
@@ -1892,7 +2062,9 @@ document
 
 
 document
-    .getElementById("manualUSD")
+    .getElementById(
+        "manualUSD"
+    )
     .addEventListener(
         "input",
         updateCarRate
@@ -1940,6 +2112,7 @@ function dutyPhysUnder3(
 ){
 
     let percent;
+
     let minPerCm;
 
 
@@ -2189,7 +2362,7 @@ function dutyLegalDiesel(
 
 
 /* =========================================================
-   DUTY
+   CUSTOMS DUTY
 ========================================================= */
 
 function getCustomsDuty({
@@ -2519,6 +2692,10 @@ function calculate(){
         ).value;
 
 
+    /*
+       Курс EUR для таможенного расчёта.
+    */
+
     const eurRate =
         96.8601;
 
@@ -2547,7 +2724,8 @@ function calculate(){
         );
 
 
-    errorBox.innerHTML = "";
+    errorBox.innerHTML =
+        "";
 
 
     /* ================= VALIDATION ================= */
@@ -2557,7 +2735,9 @@ function calculate(){
         errorBox.innerHTML =
             "Укажите стоимость автомобиля.";
 
-        results.classList.add("visible");
+        results.classList.add(
+            "visible"
+        );
 
         return;
     }
@@ -2571,7 +2751,9 @@ function calculate(){
         errorBox.innerHTML =
             "Укажите объём двигателя.";
 
-        results.classList.add("visible");
+        results.classList.add(
+            "visible"
+        );
 
         return;
     }
@@ -2585,7 +2767,9 @@ function calculate(){
         errorBox.innerHTML =
             "Укажите мощность автомобиля.";
 
-        results.classList.add("visible");
+        results.classList.add(
+            "visible"
+        );
 
         return;
     }
@@ -2600,7 +2784,9 @@ function calculate(){
         errorBox.innerHTML =
             "Курс выбранной валюты не загружен.";
 
-        results.classList.add("visible");
+        results.classList.add(
+            "visible"
+        );
 
         return;
     }
@@ -2635,7 +2821,9 @@ function calculate(){
     /* ================= CUSTOMS FEE ================= */
 
     const customsFee =
-        getCustomsFee(priceRub);
+        getCustomsFee(
+            priceRub
+        );
 
 
     /* ================= EXCISE ================= */
@@ -2672,7 +2860,10 @@ function calculate(){
 
 
     if(classic){
-        utilization = 0;
+
+        utilization =
+            0;
+
     }
 
 
@@ -2731,7 +2922,8 @@ function calculate(){
         );
 
 
-    details.innerHTML = "";
+    details.innerHTML =
+        "";
 
 
     addDetail(
@@ -2880,7 +3072,9 @@ function addDetail(
     `;
 
 
-    details.appendChild(div);
+    details.appendChild(
+        div
+    );
 }
 
 
@@ -2914,14 +3108,33 @@ function number(value){
 }
 
 
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
 function escapeHtml(value){
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }
 
 
@@ -2933,6 +3146,12 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        /*
+           Сначала показываем fallback,
+           затем сразу пытаемся получить
+           свежие курсы с API.
+        */
+
         updateRatesUI();
 
         updateCarRate();
@@ -2941,8 +3160,8 @@ document.addEventListener(
 
 
         /*
-           Автоматически обновляем
-           курсы каждые 10 минут.
+           Автоматическое обновление
+           каждые 10 минут.
         */
 
         setInterval(
